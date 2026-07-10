@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.asset.mapper.AssetRepairMapper">
+
+    <select id="getRepair" resultType="assetRepairDetailVo">
+        SELECT t1.*, t2.category_name, t3.warehouse_name
+        FROM asset_repair t1
+        LEFT JOIN asset_category t2 ON t1.category_id = t2.category_id
+        LEFT JOIN asset_warehouse t3 ON t1.warehouse_id = t3.warehouse_id
+        ${ew.customSqlSegment}
+    </select>
+
+    <select id="selectRepairList" resultType="assetRepairQueryVo">
+        SELECT
+            t1.repair_id,
+            t1.detail_id,
+            t1.asset_name,
+            t1.category_id,
+            t2.category_name,
+            t1.warehouse_id,
+            t3.warehouse_name,
+            t1.repair_user,
+            t1.create_time,
+            t1.create_by
+        FROM asset_repair t1
+        LEFT JOIN asset_category t2 ON t1.category_id = t2.category_id
+        LEFT JOIN asset_warehouse t3 ON t1.warehouse_id = t3.warehouse_id
+        ${ew.customSqlSegment}
+    </select>
+</mapper>

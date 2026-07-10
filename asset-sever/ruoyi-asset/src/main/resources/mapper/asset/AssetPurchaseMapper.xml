@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<!-- mapper/EmployeesMapper.xml -->
+<mapper namespace="com.ruoyi.asset.mapper.AssetPurchaseMapper">
+    <update id="updateAuditStatusByPurchaseIds">
+        UPDATE asset_purchase
+        SET audit_status=#{auditStatus}
+        WHERE purchase_id IN
+        <foreach collection="purchaseIds" item="id" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </update>
+
+    <select id="getDetail" resultType="assetPurchaseDetailVo">
+        SELECT
+            t1.purchase_id,
+            t1.asset_name,
+            t1.category_id,
+            t1.spec,
+            t1.model,
+            t1.size,
+            t1.material,
+            t1.use_range,
+            t1.warehouse_id,
+            t1.purchase_price,
+            t1.sale_price,
+            t1.supplier_id,
+            t2.supplier_name,
+            t1.size_unit_id,
+            t1.measure_unit_id,
+            t3.unit_name as measure_unit_name,
+            t1.purchase_num,
+            t1.can_in_num,
+            t1.purchase_reason,
+            t1.submit_status,
+            t1.audit_status,
+            t1.in_status,
+            t1.create_by,
+            t1.create_time,
+            t1.update_by,
+            t1.update_time,
+            t1.del_flag,
+            t1.remark
+        FROM
+            asset_purchase AS t1
+                LEFT JOIN asset_supplier AS t2 ON t1.supplier_id = t2.supplier_id
+                LEFT JOIN asset_unit AS t3 ON t1.measure_unit_id = t3.unit_id
+            ${ew.customSqlSegment}
+    </select>
+
+    <select id="selectPurchaseList" resultType="assetPurchaseQueryVo">
+        SELECT
+            t1.purchase_id,
+            t1.asset_name,
+            t1.submit_status,
+            t1.audit_status,
+            t1.in_status,
+            t1.purchase_price,
+            t1.sale_price,
+            t1.purchase_num,
+            t1.can_in_num,
+            t1.spec,
+            t1.model,
+            t3.unit_name
+        FROM
+            asset_purchase AS t1
+                LEFT JOIN asset_unit AS t3 ON t1.measure_unit_id = t3.unit_id
+            ${ew.customSqlSegment}
+    </select>
+</mapper>

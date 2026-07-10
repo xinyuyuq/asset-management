@@ -1,0 +1,75 @@
+package com.ruoyi.asset.controller;
+
+import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
+import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
+import com.github.pagehelper.Page;
+import com.github.pagehelper.PageHelper;
+import com.ruoyi.asset.domain.entity.AssetRepair;
+import com.ruoyi.asset.domain.param.AssetRepairParam.AssetRepairQueryParam;
+import com.ruoyi.asset.domain.vo.AssetRepairDetailVo;
+import com.ruoyi.asset.domain.vo.AssetRepairQueryVo;
+import com.ruoyi.asset.mapper.AssetRepairMapper;
+import com.ruoyi.asset.service.IAssetRepairService;
+import com.ruoyi.common.annotation.Log;
+import com.ruoyi.common.core.controller.BaseController;
+import com.ruoyi.asset.domain.param.PageQuery;
+import com.ruoyi.common.core.page.TableDataInfo;
+import com.ruoyi.common.core.domain.R;
+import com.ruoyi.common.enums.BusinessType;
+import com.ruoyi.common.utils.poi.ExcelUtil;
+import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiOperation;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.*;
+
+import javax.servlet.http.HttpServletResponse;
+import java.util.List;
+
+@Api(tags = "资产报修")
+@RestController
+@RequestMapping("/repair")
+public class AssetRepairController extends BaseController {
+
+    @Autowired
+    private IAssetRepairService service;
+
+    @Autowired
+    private AssetRepairMapper mapper;
+
+    @ApiOperation("分页查询资产报修")
+    @GetMapping("/list")
+    public TableDataInfo list(AssetRepairQueryParam assetRepairQueryParam, PageQuery pageQuery) {
+        Page<Object> objects = PageHelper.startPage(pageQuery.getPageNum(), pageQuery.getPageSize());
+        QueryWrapper<AssetRepair> qw = new QueryWrapper<>();
+        qw.eq("t1.del_flag", "0");
+        if (assetRepairQueryParam.getAssetName() != null) {
+            qw.like("t1.asset_name", assetRepairQueryParam.getAssetName());
+        }
+
+        List<AssetRepairQueryVo> rows = mapper.selectRepairList(qw);
+
+        long total = objects.getTotal();
+        return TableDataInfo.ok(rows, total);
+    }
+
+    @ApiOperation("查询资产报修详情")
+    @GetMapping("/{repairId}")
+    public R<?> detail(@PathVariable Integer repairId) {
+        QueryWrapper<AssetRepair> qw = new QueryWrapper<>();
+        qw.eq("t1.repair_id", repairId);
+        qw.eq("t1.del_flag", "0");
+        AssetRepairDetailVo detailVo = service.getRepair(qw);
+        return R.ok(detailVo);
+    }
+
+    @ApiOperation("导出资产报修数据")
+    @Log(title = "资产报修", businessType = BusinessType.EXPORT)
+    @PostMapping("/export")
+    public void export(HttpServletResponse response) {
+        QueryWrapper<AssetRepair> qw = new QueryWrapper<>();
+        qw.eq("del_flag", "0");
+        List<AssetRepair> list = service.list(qw);
+        ExcelUtil<AssetRepair> util = new ExcelUtil<>(AssetRepair.class);
+        util.exportExcel(response, list, "资产报修数据");
+    }
+}

@@ -1,0 +1,74 @@
+# ==================== 全局通用 ====================
+# 日志文件
+*.log
+hs_err_pid*.log
+logs/
+
+# 临时/备份文件
+*.tmp
+*.bak
+*.swp
+Thumbs.db
+.DS_Store
+
+# IDE 编辑器配置
+.idea/
+.vscode/
+*.iws
+*.iml
+*.ipr
+*.suo
+*.ntvs*
+*.njsproj
+*.sln
+*.local
+
+# ==================== Java 后端 Maven ====================
+# 编译产物，整个文件夹直接忽略
+target/
+*.jar
+*.class
+
+# Gradle 构建输出（兼容，本项目不用不影响）
+.gradle/
+/build/
+!gradle/wrapper/gradle-wrapper.jar
+
+# 本地环境配置（敏感数据库/Redis配置禁止上传）
+application-local.yml
+application-local.properties
+bootstrap-local.yml
+
+# ==================== Vue 前端 ====================
+# 依赖包（上万小文件，必忽略）
+node_modules/
+# 前端打包产物
+dist/
+# 前端本地环境变量
+.env.local
+.env.development.local
+
+# npm/yarn 运行日志
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# lock文件建议保留提交，不需要再取消注释
+# package-lock.json
+# yarn.lock
+
+# ==================== 数据库 ====================
+# 数据库备份、压缩包
+*.sql.gz
+*.sql.bak
+*.bak
+
+# ==================== 文档/大资源文件 ====================
+# 全局所有目录下pdf、文档、压缩包全部忽略
+*.pdf
+*.docx
+*.zip
+*.rar
+*.7z
+doc/
+bin/*.log
