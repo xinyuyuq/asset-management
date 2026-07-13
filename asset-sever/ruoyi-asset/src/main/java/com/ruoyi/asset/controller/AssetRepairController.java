@@ -20,6 +20,7 @@ import com.ruoyi.common.utils.poi.ExcelUtil;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletResponse;
@@ -37,6 +38,7 @@ public class AssetRepairController extends BaseController {
     private AssetRepairMapper mapper;
 
     @ApiOperation("分页查询资产报修")
+    @PreAuthorize("@ss.hasPermi('asset:repair:list')")
     @GetMapping("/list")
     public TableDataInfo list(AssetRepairQueryParam assetRepairQueryParam, PageQuery pageQuery) {
         Page<Object> objects = PageHelper.startPage(pageQuery.getPageNum(), pageQuery.getPageSize());
@@ -53,6 +55,7 @@ public class AssetRepairController extends BaseController {
     }
 
     @ApiOperation("查询资产报修详情")
+    @PreAuthorize("@ss.hasPermi('asset:repair:query')")
     @GetMapping("/{repairId}")
     public R<?> detail(@PathVariable Integer repairId) {
         QueryWrapper<AssetRepair> qw = new QueryWrapper<>();
@@ -63,6 +66,7 @@ public class AssetRepairController extends BaseController {
     }
 
     @ApiOperation("导出资产报修数据")
+    @PreAuthorize("@ss.hasPermi('asset:repair:export')")
     @Log(title = "资产报修", businessType = BusinessType.EXPORT)
     @PostMapping("/export")
     public void export(HttpServletResponse response) {

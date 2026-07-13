@@ -19,6 +19,7 @@ import com.ruoyi.common.utils.poi.ExcelUtil;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -35,6 +36,7 @@ public class AssetSupplierController {
     private IAssetSupplierService service;
 
     @ApiOperation("分页查询资产供应商")
+    @PreAuthorize("@ss.hasPermi('asset:supplier:list')")
     @GetMapping("/list")
     public TableDataInfo list(AssetSupplierQueryParam assetSupplierQueryParam, PageQuery pageQuery){
         Page<Object> objects = PageHelper.startPage(pageQuery.getPageNum(), pageQuery.getPageSize());
@@ -53,6 +55,7 @@ public class AssetSupplierController {
     }
 
     @ApiOperation("查询资产供应商详情")
+    @PreAuthorize("@ss.hasPermi('asset:supplier:query')")
     @GetMapping("/{supplierId}")
     public R<?> detail(@PathVariable Integer supplierId){
         AssetSupplier assetSupplier = service.getById(supplierId);
@@ -60,6 +63,7 @@ public class AssetSupplierController {
     }
 
     @ApiOperation("新增资产供应商")
+    @PreAuthorize("@ss.hasPermi('asset:supplier:add')")
     @PostMapping("/create")
     public R<?> create(@RequestBody AssetSupplierCreateParam assetSupplierCreateParam){
         AssetSupplier assetSupplier = AssetSupplierMapping.INSTANCE.to(assetSupplierCreateParam);
@@ -69,6 +73,7 @@ public class AssetSupplierController {
     }
 
     @ApiOperation("修改资产供应商")
+    @PreAuthorize("@ss.hasPermi('asset:supplier:edit')")
     @PutMapping("/update")
     public R<?> update(@RequestBody AssetSupplierUpdateParam assetSupplierUpdateParam){
         AssetSupplier assetSupplier = AssetSupplierMapping.INSTANCE.to(assetSupplierUpdateParam);
@@ -78,6 +83,7 @@ public class AssetSupplierController {
     }
 
     @ApiOperation(value = "批量删除资产供应商",notes = "传入supplierId集合")
+    @PreAuthorize("@ss.hasPermi('asset:supplier:remove')")
     @DeleteMapping("/{supplierIds}")
     public R<?> delete(@PathVariable List<Long> supplierIds){
         LambdaUpdateWrapper<AssetSupplier> uw = new LambdaUpdateWrapper<>();
@@ -90,6 +96,7 @@ public class AssetSupplierController {
     }
 
     @ApiOperation("导出资产供应商数据")
+    @PreAuthorize("@ss.hasPermi('asset:supplier:export')")
     @PostMapping("/export")
     public void export(HttpServletResponse response)
     {
@@ -101,6 +108,7 @@ public class AssetSupplierController {
     }
 
     @ApiOperation("导入资产供应商数据")
+    @PreAuthorize("@ss.hasPermi('asset:supplier:import')")
     @PostMapping("/importData")
     public R<?> importData(MultipartFile file) throws Exception
     {
@@ -116,6 +124,7 @@ public class AssetSupplierController {
     }
 
     @ApiOperation("导出资产供应商数据模板")
+    @PreAuthorize("@ss.hasPermi('asset:supplier:template')")
     @PostMapping("/importTemplate")
     public void importTemplate(HttpServletResponse response)
     {

@@ -19,6 +19,7 @@ import com.ruoyi.common.utils.poi.ExcelUtil;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -35,6 +36,7 @@ public class AssetWarehouseController {
 
 
     @ApiOperation("分页查询资产仓库列表")
+    @PreAuthorize("@ss.hasPermi('asset:warehouse:list')")
     @GetMapping("/list")
     public TableDataInfo list(AssetWarehouseQueryParam assetWarehouseQueryParam, PageQuery pageQuery){
         Page<Object> objects = PageHelper.startPage(pageQuery.getPageNum(), pageQuery.getPageSize());
@@ -53,6 +55,7 @@ public class AssetWarehouseController {
     }
 
     @ApiOperation("查询资产仓库详情")
+    @PreAuthorize("@ss.hasPermi('asset:warehouse:query')")
     @GetMapping("/{warehouseId}")
     public R<?> detail(@PathVariable String warehouseId){
         AssetWarehouse assetWarehouse = service.getById(warehouseId);
@@ -60,6 +63,7 @@ public class AssetWarehouseController {
     }
 
     @ApiOperation("新增资产仓库")
+    @PreAuthorize("@ss.hasPermi('asset:warehouse:add')")
     @PostMapping("/create")
     public R<?> create(@RequestBody AssetWarehouseCreateParam assetWarehouseCreateParam){
         AssetWarehouse assetWarehouse = AssetWarehouseMapping.INSTANCE.to(assetWarehouseCreateParam);
@@ -69,6 +73,7 @@ public class AssetWarehouseController {
     }
 
     @ApiOperation("修改资产仓库")
+    @PreAuthorize("@ss.hasPermi('asset:warehouse:edit')")
     @PutMapping("/update")
     public R<?> update(@RequestBody AssetWarehouseUpdateParam assetWarehouseUpdateParam){
         AssetWarehouse assetWarehouse = AssetWarehouseMapping.INSTANCE.to(assetWarehouseUpdateParam);
@@ -78,6 +83,7 @@ public class AssetWarehouseController {
     }
 
     @ApiOperation(value = "删除资产仓库",notes = "传入warehouseId集合")
+    @PreAuthorize("@ss.hasPermi('asset:warehouse:remove')")
     @DeleteMapping("/{warehouseIds}")
     public R<?> delete(@PathVariable List<Long> warehouseIds){
         LambdaUpdateWrapper<AssetWarehouse> uw = new LambdaUpdateWrapper<>();
@@ -90,6 +96,7 @@ public class AssetWarehouseController {
     }
 
     @ApiOperation("导出资产仓库数据")
+    @PreAuthorize("@ss.hasPermi('asset:warehouse:export')")
     @PostMapping("/export")
     public void export(HttpServletResponse response)
     {
@@ -101,6 +108,7 @@ public class AssetWarehouseController {
     }
 
     @ApiOperation("导入资产仓库数据")
+    @PreAuthorize("@ss.hasPermi('asset:warehouse:import')")
     @PostMapping("/importData")
     public R<?> importData(MultipartFile file) throws Exception
     {
@@ -116,6 +124,7 @@ public class AssetWarehouseController {
     }
 
     @ApiOperation("导出资产仓库数据模板")
+    @PreAuthorize("@ss.hasPermi('asset:warehouse:template')")
     @PostMapping("/importTemplate")
     public void importTemplate(HttpServletResponse response)
     {

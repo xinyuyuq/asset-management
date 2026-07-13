@@ -21,6 +21,7 @@ import com.ruoyi.common.utils.poi.ExcelUtil;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -37,6 +38,7 @@ public class AssetCategoryController {
     private IAssetCategoryService service;
 
     @ApiOperation("分页查询资产品类列表")
+    @PreAuthorize("@ss.hasPermi('asset:category:list')")
     @GetMapping("list")
     public TableDataInfo list(AssetCategoryQueryParam assetCategoryQueryParam, PageQuery pageQuery){
 
@@ -53,6 +55,7 @@ public class AssetCategoryController {
     }
 
     @ApiOperation("查询资产品类详情")
+    @PreAuthorize("@ss.hasPermi('asset:category:query')")
     @GetMapping("/{categoryId}")
     public R<?> detail(@PathVariable Integer categoryId){
         QueryWrapper<AssetCategory> qw = new QueryWrapper<>();
@@ -66,6 +69,7 @@ public class AssetCategoryController {
 
     //TODO 计量单位，尺寸单位，仓库，供应商可以列出选择
     @ApiOperation("新增资产品类详情")
+    @PreAuthorize("@ss.hasPermi('asset:category:add')")
     @PostMapping("/create")
     public R<?> create(@RequestBody AssetCategoryCreateParam assetCategoryCreateParam){
         AssetCategory assetCategory = AssetCategoryMapping.INSTANCE.to(assetCategoryCreateParam);
@@ -77,6 +81,7 @@ public class AssetCategoryController {
     }
 
     @ApiOperation("修改资产品类")
+    @PreAuthorize("@ss.hasPermi('asset:category:edit')")
     @PutMapping("/update")
     public R<?> update(@RequestBody AssetCategoryUpdateParam assetCategoryUpdateParam){
         AssetCategory assetCategory = AssetCategoryMapping.INSTANCE.to(assetCategoryUpdateParam);
@@ -86,6 +91,7 @@ public class AssetCategoryController {
     }
 
     @ApiOperation(value = "批量删除资产品类",notes = "传入资产品类Id集合")
+    @PreAuthorize("@ss.hasPermi('asset:category:remove')")
     @DeleteMapping("/{categoryIds}")
     public R<?> delete(@PathVariable List<Long> categoryIds){
         LambdaUpdateWrapper<AssetCategory> uw = new LambdaUpdateWrapper<>();
@@ -98,6 +104,7 @@ public class AssetCategoryController {
     }
 
     @ApiOperation("导出资产品类数据")
+    @PreAuthorize("@ss.hasPermi('asset:category:export')")
     @PostMapping("/export")
     public void export(HttpServletResponse response)
     {
