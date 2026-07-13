@@ -119,7 +119,7 @@
             size="mini"
             type="text"
             icon="el-icon-inbox"
-            :disabled="scope.row.auditStatus !== '1' || scope.row.inStatus !== '0'"
+            :disabled="scope.row.auditStatus !== '1' || scope.row.inStatus !== '0' || scope.row.canInNum <= 0"
             @click="handleStockIn(scope.row)"
             v-hasPermi="['asset:purchase:stockIn']"
           >入库</el-button>
