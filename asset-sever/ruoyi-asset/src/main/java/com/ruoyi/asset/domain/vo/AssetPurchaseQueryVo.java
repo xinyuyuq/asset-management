@@ -56,4 +56,10 @@ public class AssetPurchaseQueryVo {
     @ApiModelProperty("计量单位名称")
     private String measureUnitName;
 
+    @ApiModelProperty("采购人ID")
+    private Long purchaseUserId;
+
+    @ApiModelProperty("采购人名称")
+    private String purchaseUserName;
+
 }

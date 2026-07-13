@@ -66,4 +66,10 @@ public class AssetPurchaseDetailVo {
 
     @ApiModelProperty("备注")
     private String remark;
+
+    @ApiModelProperty("采购人ID")
+    private Long purchaseUserId;
+
+    @ApiModelProperty("采购人名称")
+    private String purchaseUserName;
 }

@@ -101,6 +101,14 @@ public class AssetPurchase {
     @Excel(name = "入库状态(0未入库 1已入库)")
     private String inStatus;
 
+    @ApiModelProperty("采购人ID")
+    @Excel(name = "采购人ID", type = Excel.Type.EXPORT)
+    private Long purchaseUserId;
+
+    @ApiModelProperty("采购人名称")
+    @Excel(name = "采购人名称")
+    private String purchaseUserName;
+
     @ApiModelProperty("创建者")
     @Excel(name = "创建者", type = Excel.Type.EXPORT)
     @TableField(fill = FieldFill.INSERT)

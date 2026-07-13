@@ -21,6 +21,7 @@ import com.ruoyi.asset.service.IAssetDetailService;
 import com.ruoyi.asset.service.IAssetPurchaseService;
 import com.ruoyi.common.core.domain.R;
 import com.ruoyi.common.core.page.TableDataInfo;
+import com.ruoyi.common.utils.SecurityUtils;
 import com.ruoyi.common.utils.poi.ExcelUtil;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -54,6 +55,9 @@ public class AssetPurchaseController {
         QueryWrapper<AssetPurchase> qw = new QueryWrapper<>();
         qw.eq("t1.del_flag","0");
         qw.like(assetPurchaseQueryParam.getAssetName()!=null,"t1.asset_name",assetPurchaseQueryParam.getAssetName());
+        if (!SecurityUtils.isAdmin()) {
+            qw.eq("t1.purchase_user_id", SecurityUtils.getUserId());
+        }
 
         List<AssetPurchaseQueryVo> rows = mapper.selectPurchaseList(qw);
 
@@ -79,6 +83,8 @@ public class AssetPurchaseController {
     @PostMapping("/create")
     public R<?> create(@RequestBody AssetPurchaseCreateParam assetPurchaseCreateParam){
         AssetPurchase assetPurchase = AssetPurchaseMapping.INSTANCE.to(assetPurchaseCreateParam);
+        assetPurchase.setPurchaseUserId(SecurityUtils.getUserId());
+        assetPurchase.setPurchaseUserName(SecurityUtils.getUsername());
         boolean save = service.save(assetPurchase);
 
         return R.to(save,"新增");
@@ -159,6 +165,9 @@ public class AssetPurchaseController {
     {
         LambdaQueryWrapper<AssetPurchase> qw = new LambdaQueryWrapper<>();
         qw.eq(AssetPurchase::getDelFlag,"0");
+        if (!SecurityUtils.isAdmin()) {
+            qw.eq(AssetPurchase::getPurchaseUserId, SecurityUtils.getUserId());
+        }
         List<AssetPurchase> list = service.list(qw);
         ExcelUtil<AssetPurchase> util = new ExcelUtil<AssetPurchase>(AssetPurchase.class);
         util.exportExcel(response, list, "资产采购数据");

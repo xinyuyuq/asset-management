@@ -185,7 +185,7 @@ export default {
     getUserList() {
       listUser({ pageNum: 1, pageSize: 100 }).then(response => {
         this.userList = response.rows || []
-      })
+      }).catch(() => {})
     },
     assetStatusType(status) {
       if (status === '0') return 'success'

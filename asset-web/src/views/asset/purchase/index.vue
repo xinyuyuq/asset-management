@@ -96,6 +96,7 @@
           </el-tag>
         </template>
       </el-table-column>
+      <el-table-column label="采购人" align="center" prop="purchaseUserName" />
 
       <el-table-column label="操作" align="center" width="180">
         <template slot-scope="scope">
@@ -121,7 +122,7 @@
             icon="el-icon-inbox"
             :disabled="scope.row.auditStatus !== '1' || scope.row.inStatus !== '0' || scope.row.canInNum <= 0"
             @click="handleStockIn(scope.row)"
-            v-hasPermi="['asset:purchase:stockIn']"
+            v-hasPermi="['asset:purchase:stock']"
           >入库</el-button>
         </template>
       </el-table-column>

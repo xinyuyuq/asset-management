@@ -231,7 +231,7 @@ export default {
     getUserList() {
       listUser({ pageNum: 1, pageSize: 9999 }).then(response => {
         this.userList = response.rows
-      })
+      }).catch(() => {})
     },
     // 取消按钮
     cancel() {

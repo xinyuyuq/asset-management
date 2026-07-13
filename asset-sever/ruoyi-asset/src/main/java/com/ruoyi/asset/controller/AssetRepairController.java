@@ -16,6 +16,7 @@ import com.ruoyi.asset.domain.param.PageQuery;
 import com.ruoyi.common.core.page.TableDataInfo;
 import com.ruoyi.common.core.domain.R;
 import com.ruoyi.common.enums.BusinessType;
+import com.ruoyi.common.utils.SecurityUtils;
 import com.ruoyi.common.utils.poi.ExcelUtil;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -47,6 +48,9 @@ public class AssetRepairController extends BaseController {
         if (assetRepairQueryParam.getAssetName() != null) {
             qw.like("t1.asset_name", assetRepairQueryParam.getAssetName());
         }
+        if (!SecurityUtils.isAdmin()) {
+            qw.eq("t1.repair_user_id", SecurityUtils.getUserId());
+        }
 
         List<AssetRepairQueryVo> rows = mapper.selectRepairList(qw);
 
@@ -72,6 +76,9 @@ public class AssetRepairController extends BaseController {
     public void export(HttpServletResponse response) {
         QueryWrapper<AssetRepair> qw = new QueryWrapper<>();
         qw.eq("del_flag", "0");
+        if (!SecurityUtils.isAdmin()) {
+            qw.eq("repair_user_id", SecurityUtils.getUserId());
+        }
         List<AssetRepair> list = service.list(qw);
         ExcelUtil<AssetRepair> util = new ExcelUtil<>(AssetRepair.class);
         util.exportExcel(response, list, "资产报修数据");
