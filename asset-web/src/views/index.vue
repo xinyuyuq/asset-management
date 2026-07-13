@@ -122,6 +122,8 @@
 </template>
 
 <script>
+import { checkPermi } from '@/utils/permission'
+
 export default {
   name: 'Index',
   data() {
@@ -190,8 +192,7 @@ export default {
   },
   methods: {
     hasPerm(perm) {
-      const permissions = this.$store.getters && this.$store.getters.permissions
-      return permissions && (permissions.includes('*') || permissions.includes(perm))
+      return checkPermi([perm])
     },
     goToModule(module) {
       if (!this.hasPerm(module.perm)) {
