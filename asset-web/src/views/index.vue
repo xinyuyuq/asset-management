@@ -22,7 +22,11 @@
         </div>
       </div>
       <div class="section-grid">
-        <div class="module-card" v-for="module in basicModules" :key="module.path" @click="goToModule(module.path)">
+        <div class="module-card"
+             :class="{ 'module-disabled': !hasPerm(module.perm) }"
+             v-for="module in basicModules"
+             :key="module.path"
+             @click="goToModule(module)">
           <div class="module-header">
             <div class="module-icon">
               <i :class="module.icon"></i>
@@ -50,7 +54,11 @@
         </div>
       </div>
       <div class="section-grid">
-        <div class="module-card" v-for="module in flowModules" :key="module.path" @click="goToModule(module.path)">
+        <div class="module-card"
+             :class="{ 'module-disabled': !hasPerm(module.perm) }"
+             v-for="module in flowModules"
+             :key="module.path"
+             @click="goToModule(module)">
           <div class="module-header">
             <div class="module-icon">
               <i :class="module.icon"></i>
@@ -123,25 +131,29 @@ export default {
           path: '/asset/unit',
           name: '资产单位管理',
           desc: '管理计量单位和尺寸单位，支持数据导入导出',
-          icon: 'el-icon-ruler'
+          icon: 'el-icon-ruler',
+          perm: 'asset:unit:list'
         },
         {
           path: '/asset/category',
           name: '资产品类管理',
           desc: '管理资产分类信息，维护品类规格、型号等属性',
-          icon: 'el-icon-folder-opened'
+          icon: 'el-icon-folder-opened',
+          perm: 'asset:category:list'
         },
         {
           path: '/asset/supplier',
           name: '资产供应商管理',
           desc: '管理供应商信息，支持分类查询和多选选择',
-          icon: 'el-icon-user'
+          icon: 'el-icon-user',
+          perm: 'asset:supplier:list'
         },
         {
           path: '/asset/warehouse',
           name: '资产仓库管理',
           desc: '管理存放仓库，选择系统用户作为管理员',
-          icon: 'el-icon-location'
+          icon: 'el-icon-location',
+          perm: 'asset:warehouse:list'
         }
       ],
       flowModules: [
@@ -149,32 +161,44 @@ export default {
           path: '/asset/purchase',
           name: '资产采购',
           desc: '新增采购、提交审核、入库操作',
-          icon: 'el-icon-shopping-cart'
+          icon: 'el-icon-shopping-cart',
+          perm: 'asset:purchase:list'
         },
         {
           path: '/asset/audit',
           name: '资产审核',
           desc: '审核采购提交的资产，支持通过和退回',
-          icon: 'el-icon-check-circle'
+          icon: 'el-icon-check-circle',
+          perm: 'asset:audit:list'
         },
         {
           path: '/asset/detail',
           name: '资产明细',
           desc: '资产出库、报修，跟踪资产状态和领用人',
-          icon: 'el-icon-list'
+          icon: 'el-icon-list',
+          perm: 'asset:detail:list'
         },
         {
           path: '/asset/repair',
           name: '资产报修',
           desc: '管理资产报修记录，支持查询和导出',
-          icon: 'el-icon-wrench'
+          icon: 'el-icon-wrench',
+          perm: 'asset:repair:list'
         }
       ]
     }
   },
   methods: {
-    goToModule(path) {
-      this.$router.push(path).catch(err => {
+    hasPerm(perm) {
+      const permissions = this.$store.getters && this.$store.getters.permissions
+      return permissions && (permissions.includes('*') || permissions.includes(perm))
+    },
+    goToModule(module) {
+      if (!this.hasPerm(module.perm)) {
+        this.$modal.msgWarning('您暂无权限访问【' + module.name + '】模块，请联系管理员')
+        return
+      }
+      this.$router.push(module.path).catch(err => {
         this.$modal.msgError('无法访问该页面，请检查权限或联系管理员')
       })
     }
@@ -304,6 +328,18 @@ export default {
     border-color: #a0aec0;
     background: #f5f7fa;
     transform: translateY(-2px);
+  }
+
+  &.module-disabled {
+    cursor: not-allowed;
+    opacity: 0.5;
+    filter: grayscale(60%);
+
+    &:hover {
+      border-color: #e8e8e8;
+      background: #fafbfc;
+      transform: none;
+    }
   }
 
   .module-header {
