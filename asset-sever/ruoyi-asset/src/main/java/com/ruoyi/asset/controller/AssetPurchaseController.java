@@ -124,7 +124,8 @@ public class AssetPurchaseController {
             return R.fail("可入库数量不足");
         }
         purchase.setCanInNum(purchase.getCanInNum() - param.getInNum());
-        if (purchase.getCanInNum() == 0) {
+        if (purchase.getCanInNum() <= 0) {
+            purchase.setCanInNum(0);
             purchase.setInStatus("1");
         }
         service.updateById(purchase);
