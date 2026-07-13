@@ -41,6 +41,7 @@ public class AssetUnitController {
     private IAssetUnitService service;
 
     @ApiOperation("分页查询资产单位列表")
+    @PreAuthorize("@ss.hasPermi('asset:unit:list')")
     @GetMapping("/list")
     public TableDataInfo list(AssetUnitQueryParam assetUnitQueryParam, PageQuery pageQuery){
         Page<Object> objects = PageHelper.startPage(pageQuery.getPageNum(), pageQuery.getPageSize());
@@ -59,6 +60,7 @@ public class AssetUnitController {
     }
 
     @ApiOperation("查询资产单位详情")
+    @PreAuthorize("@ss.hasPermi('asset:unit:query')")
     @GetMapping("/{unitId}")
     public R<?> detail(@PathVariable String unitId){
         AssetUnit assetUnit = service.getById(unitId);
@@ -66,6 +68,7 @@ public class AssetUnitController {
     }
 
     @ApiOperation("新增资产单位")
+    @PreAuthorize("@ss.hasPermi('asset:unit:add')")
     @PostMapping("/create")
     public R<?> create(@RequestBody AssetUnitCreateParam assetUnitCreateParam){
         AssetUnit assetUnit = AssetUnitMapping.INSTANCE.to(assetUnitCreateParam);
@@ -78,6 +81,7 @@ public class AssetUnitController {
     }
 
     @ApiOperation("修改资产单位")
+    @PreAuthorize("@ss.hasPermi('asset:unit:edit')")
     @PutMapping("/update")
     public R<?> update(@RequestBody AssetUnitUpdateParam unitUpdateParam){
         AssetUnit assetUnit = AssetUnitMapping.INSTANCE.to(unitUpdateParam);
@@ -88,6 +92,7 @@ public class AssetUnitController {
     }
 
     @ApiOperation(value = "删除资产单位",notes = "传入unitId集合")
+    @PreAuthorize("@ss.hasPermi('asset:unit:remove')")
     @DeleteMapping("/{unitIds}")
     public R<?> delete(@PathVariable List<Long> unitIds){
         LambdaUpdateWrapper<AssetUnit> uw = new LambdaUpdateWrapper<>();
@@ -101,6 +106,7 @@ public class AssetUnitController {
 
 
     @ApiOperation("导入资产单位数据")
+    @PreAuthorize("@ss.hasPermi('asset:unit:import')")
     @PostMapping("/importData")
     public R<?> importData(MultipartFile file) throws Exception
     {
@@ -120,6 +126,7 @@ public class AssetUnitController {
     }
 
     @ApiOperation("导出资产单位数据模版")
+    @PreAuthorize("@ss.hasPermi('asset:unit:template')")
     @PostMapping("/importTemplate")
     public void importTemplate(HttpServletResponse response)
     {
@@ -128,6 +135,7 @@ public class AssetUnitController {
     }
 
     @ApiOperation("导出资产单位数据")
+    @PreAuthorize("@ss.hasPermi('asset:unit:export')")
     @PostMapping("/export")
     public void export(HttpServletResponse response)
     {
