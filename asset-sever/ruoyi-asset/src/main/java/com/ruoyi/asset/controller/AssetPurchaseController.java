@@ -85,6 +85,7 @@ public class AssetPurchaseController {
         AssetPurchase assetPurchase = AssetPurchaseMapping.INSTANCE.to(assetPurchaseCreateParam);
         assetPurchase.setPurchaseUserId(SecurityUtils.getUserId());
         assetPurchase.setPurchaseUserName(SecurityUtils.getUsername());
+        assetPurchase.setCanInNum(assetPurchase.getPurchaseNum());
         boolean save = service.save(assetPurchase);
 
         return R.to(save,"新增");
@@ -126,10 +127,17 @@ public class AssetPurchaseController {
     @PostMapping("/stock")
     public R<?> stock(@RequestBody AssetStockInParam param){
         AssetPurchase purchase = service.getById(param.getPurchaseId());
-        if (purchase.getCanInNum() < param.getInNum()) {
+        if (purchase == null) {
+            return R.fail("采购单不存在");
+        }
+        Integer canInNum = purchase.getCanInNum();
+        if (canInNum == null) {
+            canInNum = 0;
+        }
+        if (canInNum < param.getInNum()) {
             return R.fail("可入库数量不足");
         }
-        purchase.setCanInNum(purchase.getCanInNum() - param.getInNum());
+        purchase.setCanInNum(canInNum - param.getInNum());
         if (purchase.getCanInNum() <= 0) {
             purchase.setCanInNum(0);
             purchase.setInStatus("1");

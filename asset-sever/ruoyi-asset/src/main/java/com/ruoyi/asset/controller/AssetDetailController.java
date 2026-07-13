@@ -49,7 +49,8 @@ public class AssetDetailController {
         qw.like(assetDetailQueryParam.getAssetName()!=null,"t1.asset_name", assetDetailQueryParam.getAssetName());
         qw.eq("t1.del_flag","0");
         if (!SecurityUtils.isAdmin()) {
-            qw.eq("t1.receive_user_id", SecurityUtils.getUserId());
+            Long userId = SecurityUtils.getUserId();
+            qw.and(w -> w.eq("t1.receive_user_id", userId).or().isNull("t1.receive_user_id"));
         }
 
         List<AssetDetailQueryVo> rows = mapper.selectDetailList(qw);
@@ -118,7 +119,8 @@ public class AssetDetailController {
         LambdaQueryWrapper<AssetDetail> qw = new LambdaQueryWrapper<>();
         qw.eq(AssetDetail::getDelFlag,"0");
         if (!SecurityUtils.isAdmin()) {
-            qw.eq(AssetDetail::getReceiveUserId, SecurityUtils.getUserId().intValue());
+            Integer userId = SecurityUtils.getUserId().intValue();
+            qw.and(w -> w.eq(AssetDetail::getReceiveUserId, userId).or().isNull(AssetDetail::getReceiveUserId));
         }
         List<AssetDetail> list = service.list(qw);
         ExcelUtil<AssetDetail> util = new ExcelUtil<AssetDetail>(AssetDetail.class);

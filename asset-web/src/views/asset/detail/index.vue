@@ -115,9 +115,10 @@
             v-model="outForm.receiveUserId"
             placeholder="请选择领用人"
             style="width: 100%;"
+            :disabled="!isAdmin"
           >
             <el-option
-              v-for="user in userList"
+              v-for="user in isAdmin ? userList : [{ userId: $store.getters.id, nickName: $store.getters.nickName }]"
               :key="user.userId"
               :label="user.nickName"
               :value="user.userId"
@@ -164,7 +165,13 @@ export default {
     }
   },
   computed: {
+    isAdmin() {
+      return this.$store.getters.roles && this.$store.getters.roles.includes('admin')
+    },
     selectedUserName() {
+      if (!this.isAdmin) {
+        return this.$store.getters.nickName
+      }
       const user = this.userList.find(u => u.userId === this.outForm.receiveUserId)
       return user ? user.nickName : null
     }
@@ -217,12 +224,12 @@ export default {
     handleOut(row) {
       this.outType = 'single'
       this.currentDetailId = row.detailId
-      this.outForm.receiveUserId = undefined
+      this.outForm.receiveUserId = this.isAdmin ? undefined : this.$store.getters.id
       this.showOutModal = true
     },
     handleBatchOut() {
       this.outType = 'batch'
-      this.outForm.receiveUserId = undefined
+      this.outForm.receiveUserId = this.isAdmin ? undefined : this.$store.getters.id
       this.showOutModal = true
     },
     confirmOut() {
@@ -231,11 +238,17 @@ export default {
         return
       }
 
-      const user = this.userList.find(u => u.userId === this.outForm.receiveUserId)
+      let receiveUserName = ''
+      if (!this.isAdmin) {
+        receiveUserName = this.$store.getters.nickName
+      } else {
+        const user = this.userList.find(u => u.userId === this.outForm.receiveUserId)
+        receiveUserName = user ? user.nickName : ''
+      }
       const data = {
         detailIds: this.outType === 'single' ? [this.currentDetailId] : this.ids,
         receiveUserId: this.outForm.receiveUserId,
-        receiveUserName: user ? user.nickName : ''
+        receiveUserName: receiveUserName
       }
 
       outDetail(data).then(() => {

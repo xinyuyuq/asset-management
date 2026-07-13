@@ -47,7 +47,7 @@
             type="text"
             style="color: #409EFF;"
             @click="handleDetail(scope.row)"
-            v-hasPermi="['asset:repair:detail']"
+            v-hasPermi="['asset:repair:query']"
           >详情</el-button>
         </template>
       </el-table-column>

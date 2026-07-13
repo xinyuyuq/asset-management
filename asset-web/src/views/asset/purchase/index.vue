@@ -491,25 +491,25 @@ export default {
     loadCategoryList() {
       listCategory({ pageNum: 1, pageSize: 100 }).then(response => {
         this.categoryList = response.rows
-      })
+      }).catch(() => {})
     },
     /** 加载计量单位列表 */
     loadMeasureUnitList() {
       listUnit({ pageNum: 1, pageSize: 100, unitType: '0' }).then(response => {
         this.measureUnitList = response.rows
-      })
+      }).catch(() => {})
     },
     /** 加载尺寸单位列表 */
     loadSizeUnitList() {
       listUnit({ pageNum: 1, pageSize: 100, unitType: '1' }).then(response => {
         this.sizeUnitList = response.rows
-      })
+      }).catch(() => {})
     },
     /** 加载仓库列表 */
     loadWarehouseList() {
       listWarehouse({ pageNum: 1, pageSize: 100 }).then(response => {
         this.warehouseList = response.rows
-      })
+      }).catch(() => {})
     },
     /** 品类变更时自动填充规格型号等信息 */
     handleCategoryChange(categoryId) {
