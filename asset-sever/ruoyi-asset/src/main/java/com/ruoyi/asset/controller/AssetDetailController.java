@@ -22,6 +22,7 @@ import com.ruoyi.common.utils.poi.ExcelUtil;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletResponse;
@@ -40,6 +41,7 @@ public class AssetDetailController {
     private IAssetRepairService repairService;
 
     @ApiOperation("分页查询资产明细列表")
+    @PreAuthorize("@ss.hasPermi('asset:detail:list')")
     @GetMapping("list")
     public TableDataInfo list(AssetDetailQueryParam assetDetailQueryParam, PageQuery pageQuery){
         Page<Object> objects = PageHelper.startPage(pageQuery.getPageNum(), pageQuery.getPageSize());
@@ -54,6 +56,7 @@ public class AssetDetailController {
     }
 
     @ApiOperation("查询资产明细详情")
+    @PreAuthorize("@ss.hasPermi('asset:detail:query')")
     @GetMapping("/{detailId}")
     public R<?> detail(@PathVariable Long detailId){
         QueryWrapper<AssetDetail> qw = new QueryWrapper<>();
@@ -65,6 +68,7 @@ public class AssetDetailController {
     }
 
     @ApiOperation("出库")
+    @PreAuthorize("@ss.hasPermi('asset:detail:out')")
     @PostMapping("/out")
     public R<?> out(@RequestBody OutBatchParam param){
         LambdaUpdateWrapper<AssetDetail> uw = new LambdaUpdateWrapper<>();
@@ -80,6 +84,7 @@ public class AssetDetailController {
     }
 
     @ApiOperation(value = "报修",notes = "传入detailId")
+    @PreAuthorize("@ss.hasPermi('asset:detail:repair')")
     @PostMapping("/repair/{detailId}")
     public R<?> repair(@PathVariable Integer detailId){
         //修改资产状态为1报修
@@ -103,6 +108,7 @@ public class AssetDetailController {
     }
 
     @ApiOperation("导出资产明细数据")
+    @PreAuthorize("@ss.hasPermi('asset:detail:export')")
     @PostMapping("/export")
     public void export(HttpServletResponse response)
     {

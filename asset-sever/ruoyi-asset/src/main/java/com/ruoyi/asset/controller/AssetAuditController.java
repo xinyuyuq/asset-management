@@ -15,6 +15,7 @@ import com.ruoyi.common.utils.poi.ExcelUtil;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletResponse;
@@ -29,6 +30,7 @@ public class AssetAuditController {
     private IAssetAuditService service;
 
     @ApiOperation("分页查询资产审核")
+    @PreAuthorize("@ss.hasPermi('asset:audit:list')")
     @GetMapping("/list")
     public TableDataInfo list(AssetAuditQueryParam assetAuditQueryParam, PageQuery pageQuery){
         Page<Object> objects = PageHelper.startPage(pageQuery.getPageNum(), pageQuery.getPageSize());
@@ -46,6 +48,7 @@ public class AssetAuditController {
     }
 
     @ApiOperation("审核通过")
+    @PreAuthorize("@ss.hasPermi('asset:audit:pass')")
     @PostMapping("/pass/{auditId}")
     public R<?> pass(@PathVariable List<Long> auditId){
         boolean result = service.auditPass(auditId);
@@ -53,6 +56,7 @@ public class AssetAuditController {
     }
 
     @ApiOperation("审核退回")
+    @PreAuthorize("@ss.hasPermi('asset:audit:reject')")
     @PostMapping("/reject/{auditId}")
     public R<?> reject(@PathVariable List<Long> auditId){
         boolean result = service.auditReject(auditId);
@@ -60,6 +64,7 @@ public class AssetAuditController {
     }
 
     @ApiOperation("导出资产审核数据")
+    @PreAuthorize("@ss.hasPermi('asset:audit:export')")
     @PostMapping("/export")
     public void export(HttpServletResponse response)
     {

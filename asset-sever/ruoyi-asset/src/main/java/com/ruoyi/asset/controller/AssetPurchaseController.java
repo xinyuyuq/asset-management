@@ -26,6 +26,7 @@ import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.checkerframework.checker.units.qual.A;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletResponse;
@@ -45,6 +46,7 @@ public class AssetPurchaseController {
     private AssetPurchaseMapper mapper;
 
     @ApiOperation("分页查询资产采购")
+    @PreAuthorize("@ss.hasPermi('asset:purchase:list')")
     @GetMapping("/list")
     public TableDataInfo list(AssetPurchaseQueryParam assetPurchaseQueryParam, PageQuery pageQuery){
         Page<Object> objects = PageHelper.startPage(pageQuery.getPageNum(), pageQuery.getPageSize());
@@ -61,6 +63,7 @@ public class AssetPurchaseController {
     }
 
     @ApiOperation("查询资产采购详情")
+    @PreAuthorize("@ss.hasPermi('asset:purchase:query')")
     @GetMapping("/{purchaseId}")
     public R<?> detail(@PathVariable Integer purchaseId){
         QueryWrapper<AssetPurchase> qw = new QueryWrapper<>();
@@ -72,6 +75,7 @@ public class AssetPurchaseController {
     }
 
     @ApiOperation("新增资产采购")
+    @PreAuthorize("@ss.hasPermi('asset:purchase:add')")
     @PostMapping("/create")
     public R<?> create(@RequestBody AssetPurchaseCreateParam assetPurchaseCreateParam){
         AssetPurchase assetPurchase = AssetPurchaseMapping.INSTANCE.to(assetPurchaseCreateParam);
@@ -81,6 +85,7 @@ public class AssetPurchaseController {
     }
 
     @ApiOperation("修改资产采购")
+    @PreAuthorize("@ss.hasPermi('asset:purchase:edit')")
     @PutMapping("/update")
     public R<?> update(@RequestBody AssetPurchaseUpdateParam assetPurchaseUpdateParam){
         AssetPurchase assetPurchase = AssetPurchaseMapping.INSTANCE.to(assetPurchaseUpdateParam);
@@ -90,6 +95,7 @@ public class AssetPurchaseController {
     }
 
     @ApiOperation(value = "批量删除资产采购",notes = "传入purchaseId集合")
+    @PreAuthorize("@ss.hasPermi('asset:purchase:remove')")
     @DeleteMapping("/{purchaseIds}")
     public R<?> delete(@PathVariable List<Long> purchaseIds){
         LambdaUpdateWrapper<AssetPurchase> uw = new LambdaUpdateWrapper<>();
@@ -102,6 +108,7 @@ public class AssetPurchaseController {
     }
 
     @ApiOperation(value = "批量提交审核",notes = "传入purchaseId集合")
+    @PreAuthorize("@ss.hasPermi('asset:purchase:submit')")
     @PostMapping("/submit")
     public R<?> submit(@RequestBody List<Integer> purchaseIds){
         boolean result = service.submitAudit(purchaseIds);
@@ -109,6 +116,7 @@ public class AssetPurchaseController {
     }
 
     @ApiOperation(value = "入库")
+    @PreAuthorize("@ss.hasPermi('asset:purchase:stock')")
     @PostMapping("/stock")
     public R<?> stock(@RequestBody AssetStockInParam param){
         AssetPurchase purchase = service.getById(param.getPurchaseId());
@@ -144,6 +152,7 @@ public class AssetPurchaseController {
     }
 
     @ApiOperation("导出资产采购数据")
+    @PreAuthorize("@ss.hasPermi('asset:purchase:export')")
     @PostMapping("/export")
     public void export(HttpServletResponse response)
     {
