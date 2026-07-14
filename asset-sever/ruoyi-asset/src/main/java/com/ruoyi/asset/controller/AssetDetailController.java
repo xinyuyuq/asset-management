@@ -49,7 +49,7 @@ public class AssetDetailController {
         qw.like(assetDetailQueryParam.getAssetName()!=null,"t1.asset_name", assetDetailQueryParam.getAssetName());
         qw.eq("t1.del_flag","0");
         if (!SecurityUtils.isAdmin()) {
-            Long userId = SecurityUtils.getUserId();
+            Integer userId = SecurityUtils.getUserId().intValue();
             qw.and(w -> w.eq("t1.receive_user_id", userId).or().isNull("t1.receive_user_id"));
         }
 

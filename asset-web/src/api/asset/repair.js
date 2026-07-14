@@ -23,3 +23,10 @@ export function exportRepair(query) {
     responseType: 'blob'
   })
 }
+
+export function updateRepairStatus(repairId, repairStatus) {
+  return request({
+    url: '/repair/' + repairId + '/' + repairStatus,
+    method: 'put'
+  })
+}

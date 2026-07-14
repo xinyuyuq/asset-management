@@ -24,6 +24,8 @@ public class AssetRepairDetailVo {
 
     private String repairUser;
 
+    private String repairStatus;
+
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     private Date createTime;
 

@@ -50,6 +50,10 @@ public class AssetRepair {
     @TableField(fill = FieldFill.INSERT)
     private String repairUser;
 
+    @ApiModelProperty("维修状态(0未修 1已修好 2报废)")
+    @Excel(name = "维修状态", readConverterExp = "0=未修,1=已修好,2=报废")
+    private String repairStatus;
+
     @ApiModelProperty("创建者")
     @Excel(name = "创建者", type = Excel.Type.EXPORT)
     @TableField(fill = FieldFill.INSERT)

@@ -2,6 +2,7 @@ package com.ruoyi.asset.controller;
 
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
+import com.baomidou.mybatisplus.core.conditions.update.LambdaUpdateWrapper;
 import com.github.pagehelper.Page;
 import com.github.pagehelper.PageHelper;
 import com.ruoyi.asset.domain.entity.AssetRepair;
@@ -82,5 +83,20 @@ public class AssetRepairController extends BaseController {
         List<AssetRepair> list = service.list(qw);
         ExcelUtil<AssetRepair> util = new ExcelUtil<>(AssetRepair.class);
         util.exportExcel(response, list, "资产报修数据");
+    }
+
+    @ApiOperation("修改维修状态")
+    @PreAuthorize("@ss.hasPermi('asset:repair:edit')")
+    @Log(title = "资产报修", businessType = BusinessType.UPDATE)
+    @PutMapping("/{repairId}/{repairStatus}")
+    public R<?> updateRepairStatus(@PathVariable Integer repairId, @PathVariable String repairStatus) {
+        if (!"0".equals(repairStatus) && !"1".equals(repairStatus) && !"2".equals(repairStatus)) {
+            return R.fail("维修状态值非法");
+        }
+        LambdaUpdateWrapper<AssetRepair> uw = new LambdaUpdateWrapper<>();
+        uw.eq(AssetRepair::getRepairId, repairId);
+        uw.set(AssetRepair::getRepairStatus, repairStatus);
+        boolean update = service.update(uw);
+        return R.to(update, "修改维修状态");
     }
 }

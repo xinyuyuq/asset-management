@@ -20,6 +20,7 @@
             t1.warehouse_id,
             t3.warehouse_name,
             t1.repair_user,
+            t1.repair_status,
             t1.create_time,
             t1.create_by
         FROM asset_repair t1

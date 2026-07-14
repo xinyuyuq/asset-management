@@ -34,13 +34,20 @@
       <el-table-column label="资产分类" align="center" prop="categoryName" />
       <el-table-column label="资产仓库" align="center" prop="warehouseName" />
       <el-table-column label="报修人" align="center" prop="repairUser" />
+      <el-table-column label="维修状态" align="center" prop="repairStatus" width="120">
+        <template slot-scope="scope">
+          <el-tag :type="repairStatusType(scope.row.repairStatus)">
+            {{ repairStatusLabel(scope.row.repairStatus) }}
+          </el-tag>
+        </template>
+      </el-table-column>
       <el-table-column label="创建时间" align="center" prop="createTime" width="180">
         <template slot-scope="scope">
           <span>{{ parseTime(scope.row.createTime) }}</span>
         </template>
       </el-table-column>
       <el-table-column label="创建者" align="center" prop="createBy" />
-      <el-table-column label="操作" align="center" width="100">
+      <el-table-column label="操作" align="center" width="260">
         <template slot-scope="scope">
           <el-button
             size="mini"
@@ -49,6 +56,16 @@
             @click="handleDetail(scope.row)"
             v-hasPermi="['asset:repair:query']"
           >详情</el-button>
+          <el-dropdown @command="(command) => handleUpdateStatus(scope.row, command)" v-hasPermi="['asset:repair:edit']">
+            <el-button size="mini" type="text" style="color: #67C23A;">
+              修改状态<i class="el-icon-arrow-down el-icon--right"></i>
+            </el-button>
+            <el-dropdown-menu slot="dropdown">
+              <el-dropdown-item command="0">未修</el-dropdown-item>
+              <el-dropdown-item command="1">已修好</el-dropdown-item>
+              <el-dropdown-item command="2">报废</el-dropdown-item>
+            </el-dropdown-menu>
+          </el-dropdown>
         </template>
       </el-table-column>
     </el-table>
@@ -78,6 +95,11 @@
         <el-form-item label="报修人">
           <span>{{ detailForm.repairUser }}</span>
         </el-form-item>
+        <el-form-item label="维修状态">
+          <el-tag :type="repairStatusType(detailForm.repairStatus)">
+            {{ repairStatusLabel(detailForm.repairStatus) }}
+          </el-tag>
+        </el-form-item>
         <el-form-item label="创建时间">
           <span>{{ parseTime(detailForm.createTime) }}</span>
         </el-form-item>
@@ -93,7 +115,7 @@
 </template>
 
 <script>
-import { listRepair, getRepair, exportRepair } from "@/api/asset/repair"
+import { listRepair, getRepair, exportRepair, updateRepairStatus } from "@/api/asset/repair"
 
 export default {
   name: "Repair",
@@ -149,6 +171,30 @@ export default {
     },
     handleExport() {
       this.download(exportRepair(this.queryParams), "资产报修数据.xlsx")
+    },
+    repairStatusType(status) {
+      if (status === '0') return 'info'
+      if (status === '1') return 'success'
+      if (status === '2') return 'danger'
+      return 'info'
+    },
+    repairStatusLabel(status) {
+      if (status === '0') return '未修'
+      if (status === '1') return '已修好'
+      if (status === '2') return '报废'
+      return '未知'
+    },
+    handleUpdateStatus(row, status) {
+      this.$confirm('确认将维修状态修改为"' + this.repairStatusLabel(status) + '"吗?', "提示", {
+        confirmButtonText: "确定",
+        cancelButtonText: "取消",
+        type: "warning"
+      }).then(() => {
+        return updateRepairStatus(row.repairId, status)
+      }).then(() => {
+        this.getList()
+        this.$modal.msgSuccess("修改成功")
+      }).catch(() => {})
     }
   }
 }
