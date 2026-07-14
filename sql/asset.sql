@@ -11,7 +11,7 @@
  Target Server Version : 80043 (8.0.43)
  File Encoding         : 65001
 
- Date: 10/07/2026 11:17:52
+ Date: 14/07/2026 20:39:36
 */
 
 SET NAMES utf8mb4;
@@ -43,7 +43,7 @@ CREATE TABLE `asset_audit`  (
   INDEX `idx_asset_name`(`asset_name` ASC) USING BTREE,
   INDEX `idx_audit_status`(`audit_status` ASC) USING BTREE,
   INDEX `idx_del_flag`(`del_flag` ASC) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 13 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_0900_ai_ci COMMENT = '资产审核表' ROW_FORMAT = Dynamic;
+) ENGINE = InnoDB AUTO_INCREMENT = 16 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_0900_ai_ci COMMENT = '资产审核表' ROW_FORMAT = Dynamic;
 
 -- ----------------------------
 -- Records of asset_audit
@@ -56,6 +56,9 @@ INSERT INTO `asset_audit` VALUES (9, 4, '牛马牌打印纸', 19, 20, '晨光通
 INSERT INTO `asset_audit` VALUES (10, 7, '牛马牌空调', 2000, 100, '奥克斯', '高性能', '1', '0', '0', '', '2026-07-08 16:25:42', '', NULL, '0', NULL);
 INSERT INTO `asset_audit` VALUES (11, 1, '牛马牌空调', 2000, 1, '奥克斯', '高性能', '1', '2', '0', '', '2026-07-08 21:16:01', '', NULL, '0', '待入库');
 INSERT INTO `asset_audit` VALUES (12, 2, '牛马牌电脑桌', 60, 5, '经典A款', '标准款', '1', '0', '0', '', '2026-07-08 21:16:01', '', NULL, '0', '已全部入库');
+INSERT INTO `asset_audit` VALUES (13, 9, '牛马牌打印纸', 19, 10, '晨光通用', 'A4', '1', '1', '0', '', '2026-07-14 01:08:57', '', NULL, '0', NULL);
+INSERT INTO `asset_audit` VALUES (14, 10, '牛马牌空调', 2000, 5, '奥克斯', '高性能', '1', '2', '0', '', '2026-07-14 01:11:09', '', NULL, '0', NULL);
+INSERT INTO `asset_audit` VALUES (15, 11, '华硕天选4', 5000, 6, '华硕天选4', '8G+512G', '1', '1', '0', '', '2026-07-14 17:38:29', '', NULL, '0', NULL);
 
 -- ----------------------------
 -- Table structure for asset_category
@@ -126,16 +129,16 @@ CREATE TABLE `asset_detail`  (
   PRIMARY KEY (`detail_id`) USING BTREE,
   INDEX `idx_purchase_id`(`purchase_id` ASC) USING BTREE,
   INDEX `idx_del_flag`(`del_flag` ASC) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 27 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_0900_ai_ci COMMENT = '资产明细表(入库后资产台账)' ROW_FORMAT = Dynamic;
+) ENGINE = InnoDB AUTO_INCREMENT = 10 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_0900_ai_ci COMMENT = '资产明细表(入库后资产台账)' ROW_FORMAT = Dynamic;
 
 -- ----------------------------
 -- Records of asset_detail
 -- ----------------------------
-INSERT INTO `asset_detail` VALUES (22, 4, '牛马牌打印纸', 4, 1, 18.50, '2026-07-05', 2, '1', '1', 2, '小若依', '', 'admin', '2026-07-09 15:26:24', '0');
-INSERT INTO `asset_detail` VALUES (23, 4, '牛马牌打印纸', 4, 1, 18.50, '2026-07-08', 2, '0', '1', NULL, '', '', 'admin', '2026-07-09 15:26:34', '0');
-INSERT INTO `asset_detail` VALUES (24, 4, '牛马牌打印纸', 4, 1, 18.50, '2026-07-08', 2, '0', '0', NULL, '', '', 'admin', '2026-07-09 15:26:34', '0');
-INSERT INTO `asset_detail` VALUES (25, 4, '牛马牌打印纸', 4, 1, 20.00, '2026-07-01', 2, '0', '1', NULL, '', '', 'admin', '2026-07-09 15:35:52', '0');
-INSERT INTO `asset_detail` VALUES (26, 4, '牛马牌打印纸', 4, 1, 18.50, '2026-07-06', 2, '0', '0', NULL, '', '', 'admin', '2026-07-09 15:38:21', '0');
+INSERT INTO `asset_detail` VALUES (4, 11, '华硕天选4', 14, 2, 5000.00, '2026-07-13', 3, '1', '0', 2, '邓永鑫', '', 'niuma', '2026-07-14 17:39:08', '0');
+INSERT INTO `asset_detail` VALUES (5, 11, '华硕天选4', 14, 2, 5000.00, '2026-07-13', 3, '1', '0', 102, '牛马', '', 'niuma', '2026-07-14 17:39:08', '0');
+INSERT INTO `asset_detail` VALUES (7, 9, '牛马牌打印纸', 4, 7, 18.50, '2026-07-13', 1, '0', '2', NULL, '', '', 'dyx', '2026-07-14 19:49:46', '0');
+INSERT INTO `asset_detail` VALUES (8, 9, '牛马牌打印纸', 4, 7, 18.50, '2026-07-13', 1, '0', '0', NULL, '', '', 'dyx', '2026-07-14 19:49:46', '0');
+INSERT INTO `asset_detail` VALUES (9, 9, '牛马牌打印纸', 4, 7, 18.50, '2026-07-13', 1, '0', '0', NULL, '', '', 'dyx', '2026-07-14 19:49:46', '0');
 
 -- ----------------------------
 -- Table structure for asset_purchase
@@ -144,6 +147,8 @@ DROP TABLE IF EXISTS `asset_purchase`;
 CREATE TABLE `asset_purchase`  (
   `purchase_id` bigint NOT NULL AUTO_INCREMENT COMMENT '采购ID',
   `asset_name` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL COMMENT '资产名称',
+  `purchase_user_id` bigint NULL DEFAULT NULL COMMENT '采购人ID',
+  `purchase_user_name` varchar(64) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NULL DEFAULT NULL COMMENT '采购人名称',
   `category_id` bigint NOT NULL COMMENT '资产品类ID',
   `spec` varchar(100) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NULL DEFAULT NULL COMMENT '规格',
   `model` varchar(100) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NULL DEFAULT NULL COMMENT '型号',
@@ -167,23 +172,24 @@ CREATE TABLE `asset_purchase`  (
   `update_by` varchar(64) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NULL DEFAULT '' COMMENT '更新者',
   `update_time` datetime NULL DEFAULT NULL COMMENT '更新时间',
   `del_flag` char(1) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NULL DEFAULT '0' COMMENT '删除标志(0正常 2删除)',
-  `remark` varchar(500) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NULL DEFAULT NULL COMMENT '备注',
+  `remark` varchar(500) CHARACTER SET utf8mb4 COLLATE utf8mb4_bg_0900_ai_ci NULL DEFAULT NULL COMMENT '备注',
   PRIMARY KEY (`purchase_id`, `asset_name`, `category_id`) USING BTREE,
   INDEX `idx_category_id`(`category_id` ASC) USING BTREE,
   INDEX `idx_supplier_id`(`supplier_id` ASC) USING BTREE,
   INDEX `idx_del_flag`(`del_flag` ASC) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 9 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_0900_ai_ci COMMENT = '资产采购表' ROW_FORMAT = Dynamic;
+) ENGINE = InnoDB AUTO_INCREMENT = 12 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_0900_ai_ci COMMENT = '资产采购表' ROW_FORMAT = Dynamic;
 
 -- ----------------------------
 -- Records of asset_purchase
 -- ----------------------------
-INSERT INTO `asset_purchase` VALUES (1, '牛马牌空调', 1, '高性能', '奥克斯', '中等', '金属塑料', '办公区域', 2, 2000.00, 2000.00, 1, 27, 3, 1, 1, '办公室新增设备采购', '1', '2', '0', 'admin', '2023-05-18 09:20:00', 'admin', '2026-06-28 20:18:38', '0', '待入库');
-INSERT INTO `asset_purchase` VALUES (2, '牛马牌电脑桌', 2, '标准款', '经典A款', '常规', '实木', '教师办公室', 1, 60.00, 80.00, 2, 27, 2, 5, 4, '办公桌椅补充采购', '1', '1', '0', 'admin', '2023-05-18 10:10:00', 'admin', '2026-07-09 15:17:23', '0', '已全部入库');
-INSERT INTO `asset_purchase` VALUES (3, '牛马牌台式电脑', 3, '8G+512G', '联想扬天', '小型', '金属', '机房办公', 2, 3200.00, 3500.00, 4, 27, 3, 3, 0, '计算机机房设备更新', '1', '1', '0', 'lisi', '2023-05-19 11:30:00', 'admin', '2026-07-08 22:14:24', '0', '审核退回，重新提交');
-INSERT INTO `asset_purchase` VALUES (4, '牛马牌打印纸', 4, 'A4', '晨光通用', '标准', '木浆', '全校区', 1, 18.50, 22.00, 3, 27, 2, 20, 10, '日常耗材批量采购', '1', '1', '0', 'zhangsan', '2023-05-20 14:00:00', 'admin', '2026-07-09 15:38:20', '0', '未提交审核');
-INSERT INTO `asset_purchase` VALUES (5, '电脑桌', 2, '标准款', '经典A款', '1.8', '实木', '教师办公室', 1, 60.00, 80.00, 8, 27, 2, 200, 198, NULL, '0', '0', '0', 'admin', '2026-06-28 19:37:38', 'admin', '2026-07-08 22:17:50', '2', NULL);
-INSERT INTO `asset_purchase` VALUES (6, '笔记本电脑', 11, '标准款', '华硕天选4', '20', '金属', NULL, 4, 5000.00, 6000.00, 1, 27, 3, 20, 20, NULL, '0', '0', '0', 'admin', '2026-06-28 19:39:48', 'admin', '2026-06-28 19:39:48', '2', NULL);
-INSERT INTO `asset_purchase` VALUES (7, '牛马牌空调', 1, '高性能', '奥克斯', '100', '金属塑料', '办公区域', 2, 2000.00, 2000.00, 1, 27, 3, 100, 100, NULL, '1', '0', '0', 'admin', '2026-06-28 20:02:17', 'admin', '2026-06-28 20:02:17', '0', NULL);
+INSERT INTO `asset_purchase` VALUES (1, '牛马牌空调', NULL, 'admin', 1, '高性能', '奥克斯', '中等', '金属塑料', '办公区域', 2, 2000.00, 2000.00, 1, 27, 3, 1, 1, '办公室新增设备采购', '1', '2', '0', 'admin', '2023-05-18 09:20:00', 'admin', '2026-06-28 20:18:38', '0', '待入库');
+INSERT INTO `asset_purchase` VALUES (2, '牛马牌电脑桌', NULL, 'admin', 2, '标准款', '经典A款', '常规', '实木', '教师办公室', 1, 60.00, 80.00, 2, 27, 2, 5, 5, '办公桌椅补充采购', '1', '1', '0', 'admin', '2023-05-18 10:10:00', 'admin', '2026-07-13 23:56:32', '0', '已全部入库');
+INSERT INTO `asset_purchase` VALUES (5, '电脑桌', NULL, 'admin', 2, '标准款', '经典A款', '1.8', '实木', '教师办公室', 1, 60.00, 80.00, 8, 27, 2, 200, 198, NULL, '0', '0', '0', 'admin', '2026-06-28 19:37:38', 'admin', '2026-07-08 22:17:50', '2', NULL);
+INSERT INTO `asset_purchase` VALUES (6, '笔记本电脑', NULL, 'admin', 11, '标准款', '华硕天选4', '20', '金属', NULL, 4, 5000.00, 6000.00, 1, 27, 3, 20, 20, NULL, '0', '0', '0', 'admin', '2026-06-28 19:39:48', 'admin', '2026-06-28 19:39:48', '2', NULL);
+INSERT INTO `asset_purchase` VALUES (7, '牛马牌空调', NULL, 'admin', 1, '高性能', '奥克斯', '100', '金属塑料', '办公区域', 2, 2000.00, 2000.00, 1, 27, 3, 100, 100, NULL, '1', '0', '0', 'admin', '2026-06-28 20:02:17', 'admin', '2026-06-28 20:02:17', '0', NULL);
+INSERT INTO `asset_purchase` VALUES (9, '牛马牌打印纸', 2, 'dyx', 4, 'A4', '晨光通用', '30', '木浆', '全校区', 3, 18.50, 22.00, 8, 27, 1, 10, 4, NULL, '1', '1', '0', 'dyx', '2026-07-14 01:06:21', 'dyx', '2026-07-14 19:49:46', '0', NULL);
+INSERT INTO `asset_purchase` VALUES (10, '牛马牌空调', 2, 'dyx', 1, '高性能', '奥克斯', '100', '金属塑料', '办公区域', 2, 2000.00, 2000.00, 1, 27, 3, 5, 5, NULL, '1', '2', '0', 'dyx', '2026-07-14 01:11:03', 'dyx', '2026-07-14 01:11:03', '0', NULL);
+INSERT INTO `asset_purchase` VALUES (11, '华硕天选4', 102, 'niuma', 14, '8G+512G', '华硕天选4', '40', '塑料，金属', '学习，娱乐', 1, 5000.00, 6500.00, 1, 27, 3, 6, 3, NULL, '1', '1', '0', 'niuma', '2026-07-14 17:38:16', 'niuma', '2026-07-14 17:39:08', '0', NULL);
 
 -- ----------------------------
 -- Table structure for asset_repair
@@ -197,6 +203,7 @@ CREATE TABLE `asset_repair`  (
   `warehouse_id` bigint NULL DEFAULT NULL COMMENT '资产仓库ID',
   `repair_user_id` varchar(64) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NULL DEFAULT NULL COMMENT '报修人ID',
   `repair_user` varchar(64) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NULL DEFAULT NULL COMMENT '报修人',
+  `repair_status` varchar(1) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NULL DEFAULT '0' COMMENT '维修状态（0未修 1已修好 2报废）',
   `create_by` varchar(64) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NULL DEFAULT '' COMMENT '创建者',
   `create_time` datetime NULL DEFAULT NULL COMMENT '创建时间',
   `update_by` varchar(64) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NULL DEFAULT '' COMMENT '更新者',
@@ -207,14 +214,17 @@ CREATE TABLE `asset_repair`  (
   INDEX `idx_asset_detail_id`(`detail_id` ASC) USING BTREE,
   INDEX `idx_asset_name`(`asset_name` ASC) USING BTREE,
   INDEX `idx_del_flag`(`del_flag` ASC) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 12 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_0900_ai_ci COMMENT = '资产报修表' ROW_FORMAT = Dynamic;
+) ENGINE = InnoDB AUTO_INCREMENT = 18 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_0900_ai_ci COMMENT = '资产报修表' ROW_FORMAT = Dynamic;
 
 -- ----------------------------
 -- Records of asset_repair
 -- ----------------------------
-INSERT INTO `asset_repair` VALUES (9, 23, '牛马牌打印纸', 4, 1, '1', 'admin', 'admin', '2026-07-09 15:26:53', 'admin', '2026-07-09 15:26:53', '0', NULL);
-INSERT INTO `asset_repair` VALUES (10, 25, '牛马牌打印纸', 4, 1, '1', 'admin', 'admin', '2026-07-09 15:36:02', 'admin', '2026-07-09 15:36:02', '0', NULL);
-INSERT INTO `asset_repair` VALUES (11, 22, '牛马牌打印纸', 4, 1, '1', 'admin', 'admin', '2026-07-09 15:59:58', 'admin', '2026-07-09 15:59:58', '0', NULL);
+INSERT INTO `asset_repair` VALUES (9, 23, '牛马牌打印纸', 4, 1, '1', 'admin', '0', 'admin', '2026-07-09 15:26:53', 'admin', '2026-07-09 15:26:53', '0', NULL);
+INSERT INTO `asset_repair` VALUES (12, 24, '牛马牌打印纸', 4, 1, '2', 'dyx', '1', 'dyx', '2026-07-13 23:59:16', 'dyx', '2026-07-13 23:59:16', '0', NULL);
+INSERT INTO `asset_repair` VALUES (13, 1, '牛马牌打印纸', 4, 2, '1', 'admin', '2', 'admin', '2026-07-14 01:26:49', 'admin', '2026-07-14 01:26:49', '0', NULL);
+INSERT INTO `asset_repair` VALUES (14, 3, '牛马牌打印纸', 4, 2, '102', 'niuma', '2', 'niuma', '2026-07-14 17:23:25', 'niuma', '2026-07-14 17:23:25', '0', NULL);
+INSERT INTO `asset_repair` VALUES (16, 5, '华硕天选4', 14, 2, '1', 'admin', '1', 'admin', '2026-07-14 19:45:49', 'admin', '2026-07-14 19:45:49', '0', NULL);
+INSERT INTO `asset_repair` VALUES (17, 7, '牛马牌打印纸', 4, 7, '2', 'dyx', '2', 'dyx', '2026-07-14 19:49:55', 'dyx', '2026-07-14 19:49:55', '0', NULL);
 
 -- ----------------------------
 -- Table structure for asset_supplier
@@ -651,7 +661,7 @@ CREATE TABLE `sys_dept`  (
   `update_by` varchar(64) CHARACTER SET utf8mb3 COLLATE utf8mb3_general_ci NULL DEFAULT '' COMMENT '更新者',
   `update_time` datetime NULL DEFAULT NULL COMMENT '更新时间',
   PRIMARY KEY (`dept_id`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 200 CHARACTER SET = utf8mb3 COLLATE = utf8mb3_general_ci COMMENT = '部门表' ROW_FORMAT = Dynamic;
+) ENGINE = InnoDB AUTO_INCREMENT = 205 CHARACTER SET = utf8mb3 COLLATE = utf8mb3_general_ci COMMENT = '部门表' ROW_FORMAT = Dynamic;
 
 -- ----------------------------
 -- Records of sys_dept
@@ -666,6 +676,11 @@ INSERT INTO `sys_dept` VALUES (106, 101, '0,100,101', '财务部门', 4, '若依
 INSERT INTO `sys_dept` VALUES (107, 101, '0,100,101', '运维部门', 5, '若依', '15888888888', 'ry@qq.com', '0', '0', 'admin', '2026-06-11 21:52:01', '', NULL);
 INSERT INTO `sys_dept` VALUES (108, 102, '0,100,102', '市场部门', 1, '若依', '15888888888', 'ry@qq.com', '0', '0', 'admin', '2026-06-11 21:52:01', '', NULL);
 INSERT INTO `sys_dept` VALUES (109, 102, '0,100,102', '财务部门', 2, '若依', '15888888888', 'ry@qq.com', '0', '0', 'admin', '2026-06-11 21:52:01', '', NULL);
+INSERT INTO `sys_dept` VALUES (200, 101, '0,100,101', '维修部门', 6, '杰弟', NULL, NULL, '0', '0', 'admin', '2026-07-14 20:12:41', '', NULL);
+INSERT INTO `sys_dept` VALUES (201, 100, '0,100', '总裁办', 3, '', NULL, NULL, '0', '0', 'admin', '2026-07-14 20:14:19', 'admin', '2026-07-14 20:15:54');
+INSERT INTO `sys_dept` VALUES (202, 201, '0,100,201', '秘书处', 0, '牛马', NULL, NULL, '0', '0', 'admin', '2026-07-14 20:15:44', '', NULL);
+INSERT INTO `sys_dept` VALUES (203, 100, '0,100', '安保部', 4, '杰弟', NULL, NULL, '0', '0', 'admin', '2026-07-14 20:16:35', '', NULL);
+INSERT INTO `sys_dept` VALUES (204, 203, '0,100,203', '中层管理', 0, '杰弟', NULL, NULL, '0', '2', 'admin', '2026-07-14 20:17:58', '', NULL);
 
 -- ----------------------------
 -- Table structure for sys_dict_data
@@ -824,7 +839,7 @@ CREATE TABLE `sys_logininfor`  (
   PRIMARY KEY (`info_id`) USING BTREE,
   INDEX `idx_sys_logininfor_s`(`status` ASC) USING BTREE,
   INDEX `idx_sys_logininfor_lt`(`login_time` ASC) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 138 CHARACTER SET = utf8mb3 COLLATE = utf8mb3_general_ci COMMENT = '系统访问记录' ROW_FORMAT = Dynamic;
+) ENGINE = InnoDB AUTO_INCREMENT = 185 CHARACTER SET = utf8mb3 COLLATE = utf8mb3_general_ci COMMENT = '系统访问记录' ROW_FORMAT = Dynamic;
 
 -- ----------------------------
 -- Records of sys_logininfor
@@ -867,6 +882,53 @@ INSERT INTO `sys_logininfor` VALUES (134, 'admin', '192.168.1.9', '内网IP', 'E
 INSERT INTO `sys_logininfor` VALUES (135, 'admin', '192.168.1.9', '内网IP', 'Edge 135', 'Windows >=10', '0', '登录成功', '2026-07-09 10:12:39');
 INSERT INTO `sys_logininfor` VALUES (136, 'admin', '192.168.1.9', '内网IP', 'Edge 135', 'Windows >=10', '0', '登录成功', '2026-07-09 11:23:53');
 INSERT INTO `sys_logininfor` VALUES (137, 'admin', '192.168.1.9', '内网IP', 'Edge 135', 'Windows >=10', '0', '登录成功', '2026-07-09 14:53:20');
+INSERT INTO `sys_logininfor` VALUES (138, 'admin', '127.0.0.1', '内网IP', 'Edge 135', 'Windows >=10', '0', '登录成功', '2026-07-13 16:25:36');
+INSERT INTO `sys_logininfor` VALUES (139, 'admin', '127.0.0.1', '内网IP', 'Edge 135', 'Windows >=10', '0', '退出成功', '2026-07-13 16:34:13');
+INSERT INTO `sys_logininfor` VALUES (140, 'admin', '127.0.0.1', '内网IP', 'Edge 135', 'Windows >=10', '0', '登录成功', '2026-07-13 16:34:48');
+INSERT INTO `sys_logininfor` VALUES (141, 'admin', '127.0.0.1', '内网IP', 'Edge 135', 'Windows >=10', '0', '登录成功', '2026-07-13 21:10:41');
+INSERT INTO `sys_logininfor` VALUES (142, 'admin', '127.0.0.1', '内网IP', 'Edge 135', 'Windows >=10', '0', '退出成功', '2026-07-13 21:48:12');
+INSERT INTO `sys_logininfor` VALUES (143, 'dyx', '127.0.0.1', '内网IP', 'Edge 135', 'Windows >=10', '0', '登录成功', '2026-07-13 21:49:10');
+INSERT INTO `sys_logininfor` VALUES (144, 'dyx', '127.0.0.1', '内网IP', 'Edge 135', 'Windows >=10', '0', '登录成功', '2026-07-13 22:44:28');
+INSERT INTO `sys_logininfor` VALUES (145, 'dyx', '127.0.0.1', '内网IP', 'Edge 135', 'Windows >=10', '0', '登录成功', '2026-07-13 22:51:41');
+INSERT INTO `sys_logininfor` VALUES (146, 'dyx', '127.0.0.1', '内网IP', 'Edge 135', 'Windows >=10', '0', '退出成功', '2026-07-13 23:00:01');
+INSERT INTO `sys_logininfor` VALUES (147, 'admin', '127.0.0.1', '内网IP', 'Edge 135', 'Windows >=10', '0', '登录成功', '2026-07-13 23:00:05');
+INSERT INTO `sys_logininfor` VALUES (148, 'dyx', '192.168.1.9', '内网IP', 'Edge 135', 'Windows >=10', '0', '登录成功', '2026-07-13 23:37:13');
+INSERT INTO `sys_logininfor` VALUES (149, 'dyx', '192.168.1.9', '内网IP', 'Edge 135', 'Windows >=10', '0', '退出成功', '2026-07-14 00:30:34');
+INSERT INTO `sys_logininfor` VALUES (150, 'dyx', '192.168.1.9', '内网IP', 'Edge 135', 'Windows >=10', '1', '验证码错误', '2026-07-14 00:30:38');
+INSERT INTO `sys_logininfor` VALUES (151, 'dyx', '192.168.1.9', '内网IP', 'Edge 135', 'Windows >=10', '0', '登录成功', '2026-07-14 00:30:42');
+INSERT INTO `sys_logininfor` VALUES (152, 'admin', '127.0.0.1', '内网IP', 'Edge 135', 'Windows >=10', '0', '登录成功', '2026-07-14 01:06:33');
+INSERT INTO `sys_logininfor` VALUES (153, 'admin', '127.0.0.1', '内网IP', 'Edge 135', 'Windows >=10', '1', '验证码已失效', '2026-07-14 16:39:07');
+INSERT INTO `sys_logininfor` VALUES (154, 'admin', '127.0.0.1', '内网IP', 'Edge 135', 'Windows >=10', '0', '登录成功', '2026-07-14 16:39:10');
+INSERT INTO `sys_logininfor` VALUES (155, 'admin', '127.0.0.1', '内网IP', 'Edge 135', 'Windows >=10', '0', '登录成功', '2026-07-14 17:14:59');
+INSERT INTO `sys_logininfor` VALUES (156, '牛马', '192.168.0.100', '内网IP', 'Edge 135', 'Windows >=10', '1', '用户不存在/密码错误', '2026-07-14 17:16:38');
+INSERT INTO `sys_logininfor` VALUES (157, 'niuma', '192.168.0.100', '内网IP', 'Edge 135', 'Windows >=10', '1', '用户不存在/密码错误', '2026-07-14 17:16:45');
+INSERT INTO `sys_logininfor` VALUES (158, 'niuma', '192.168.0.100', '内网IP', 'Edge 135', 'Windows >=10', '1', '验证码错误', '2026-07-14 17:17:38');
+INSERT INTO `sys_logininfor` VALUES (159, 'niuma', '192.168.0.100', '内网IP', 'Edge 135', 'Windows >=10', '1', '用户不存在/密码错误', '2026-07-14 17:17:41');
+INSERT INTO `sys_logininfor` VALUES (160, 'niuma', '192.168.0.100', '内网IP', 'Edge 135', 'Windows >=10', '0', '登录成功', '2026-07-14 17:17:58');
+INSERT INTO `sys_logininfor` VALUES (161, 'niuma', '192.168.0.100', '内网IP', 'Edge 135', 'Windows >=10', '0', '退出成功', '2026-07-14 17:20:43');
+INSERT INTO `sys_logininfor` VALUES (162, 'dyx', '192.168.0.100', '内网IP', 'Edge 135', 'Windows >=10', '0', '登录成功', '2026-07-14 17:20:56');
+INSERT INTO `sys_logininfor` VALUES (163, 'dyx', '192.168.0.100', '内网IP', 'Edge 135', 'Windows >=10', '0', '退出成功', '2026-07-14 17:21:44');
+INSERT INTO `sys_logininfor` VALUES (164, 'niuma', '192.168.0.100', '内网IP', 'Edge 135', 'Windows >=10', '0', '登录成功', '2026-07-14 17:21:51');
+INSERT INTO `sys_logininfor` VALUES (165, 'niuma', '192.168.0.100', '内网IP', 'Edge 135', 'Windows >=10', '0', '退出成功', '2026-07-14 17:48:24');
+INSERT INTO `sys_logininfor` VALUES (166, 'dyx', '192.168.0.100', '内网IP', 'Edge 135', 'Windows >=10', '0', '登录成功', '2026-07-14 17:48:30');
+INSERT INTO `sys_logininfor` VALUES (167, 'niuma', '192.168.0.100', '内网IP', 'Chrome 150', 'Windows10', '1', '用户不存在/密码错误', '2026-07-14 17:58:10');
+INSERT INTO `sys_logininfor` VALUES (168, 'niuma', '192.168.0.100', '内网IP', 'Chrome 150', 'Windows10', '1', '用户不存在/密码错误', '2026-07-14 17:58:11');
+INSERT INTO `sys_logininfor` VALUES (169, 'niuma', '192.168.0.100', '内网IP', 'Chrome 150', 'Windows10', '1', '用户不存在/密码错误', '2026-07-14 17:58:21');
+INSERT INTO `sys_logininfor` VALUES (170, 'niuma', '192.168.0.100', '内网IP', 'Chrome 150', 'Windows10', '1', '用户不存在/密码错误', '2026-07-14 17:58:54');
+INSERT INTO `sys_logininfor` VALUES (171, 'niuma', '192.168.0.100', '内网IP', 'Chrome 150', 'Windows10', '0', '登录成功', '2026-07-14 17:59:00');
+INSERT INTO `sys_logininfor` VALUES (172, 'admin', '127.0.0.1', '内网IP', 'Edge 135', 'Windows >=10', '0', '登录成功', '2026-07-14 19:22:28');
+INSERT INTO `sys_logininfor` VALUES (173, 'dyx', '192.168.0.100', '内网IP', 'Edge 135', 'Windows >=10', '0', '登录成功', '2026-07-14 19:23:02');
+INSERT INTO `sys_logininfor` VALUES (174, 'niuma', '192.168.0.100', '内网IP', 'Chrome 150', 'Windows10', '1', '用户不存在/密码错误', '2026-07-14 19:28:03');
+INSERT INTO `sys_logininfor` VALUES (175, 'niuma', '192.168.0.100', '内网IP', 'Chrome 150', 'Windows10', '0', '登录成功', '2026-07-14 19:28:12');
+INSERT INTO `sys_logininfor` VALUES (176, 'niuma', '192.168.0.100', '内网IP', 'Chrome 150', 'Windows10', '0', '退出成功', '2026-07-14 19:54:55');
+INSERT INTO `sys_logininfor` VALUES (177, 'dyx', '192.168.0.100', '内网IP', 'Edge 135', 'Windows >=10', '0', '退出成功', '2026-07-14 19:56:23');
+INSERT INTO `sys_logininfor` VALUES (178, 'jiedi', '192.168.0.100', '内网IP', 'Edge 135', 'Windows >=10', '1', '用户不存在/密码错误', '2026-07-14 19:56:37');
+INSERT INTO `sys_logininfor` VALUES (179, 'jiedi', '192.168.0.100', '内网IP', 'Edge 135', 'Windows >=10', '1', '用户不存在/密码错误', '2026-07-14 19:56:43');
+INSERT INTO `sys_logininfor` VALUES (180, 'jiedi', '192.168.0.100', '内网IP', 'Edge 135', 'Windows >=10', '0', '登录成功', '2026-07-14 19:57:05');
+INSERT INTO `sys_logininfor` VALUES (181, 'niuma', '192.168.0.100', '内网IP', 'Chrome 150', 'Windows10', '1', '验证码已失效', '2026-07-14 20:07:51');
+INSERT INTO `sys_logininfor` VALUES (182, 'niuma', '192.168.0.100', '内网IP', 'Chrome 150', 'Windows10', '1', '用户不存在/密码错误', '2026-07-14 20:07:54');
+INSERT INTO `sys_logininfor` VALUES (183, 'niuma', '192.168.0.100', '内网IP', 'Chrome 150', 'Windows10', '1', '用户不存在/密码错误', '2026-07-14 20:07:58');
+INSERT INTO `sys_logininfor` VALUES (184, 'niuma', '192.168.0.100', '内网IP', 'Chrome 150', 'Windows10', '0', '登录成功', '2026-07-14 20:08:06');
 
 -- ----------------------------
 -- Table structure for sys_menu
@@ -894,18 +956,18 @@ CREATE TABLE `sys_menu`  (
   `update_time` datetime NULL DEFAULT NULL COMMENT '更新时间',
   `remark` varchar(500) CHARACTER SET utf8mb3 COLLATE utf8mb3_general_ci NULL DEFAULT '' COMMENT '备注',
   PRIMARY KEY (`menu_id`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 2009 CHARACTER SET = utf8mb3 COLLATE = utf8mb3_general_ci COMMENT = '菜单权限表' ROW_FORMAT = Dynamic;
+) ENGINE = InnoDB AUTO_INCREMENT = 2101 CHARACTER SET = utf8mb3 COLLATE = utf8mb3_general_ci COMMENT = '菜单权限表' ROW_FORMAT = Dynamic;
 
 -- ----------------------------
 -- Records of sys_menu
 -- ----------------------------
 INSERT INTO `sys_menu` VALUES (1, '系统管理', 0, 1, 'system', NULL, '', '', 1, 0, 'M', '0', '0', '', 'system', 'admin', '2026-06-11 21:52:01', '', NULL, '系统管理目录');
-INSERT INTO `sys_menu` VALUES (2, '系统监控', 0, 2, 'monitor', NULL, '', '', 1, 0, 'M', '1', '0', '', 'monitor', 'admin', '2026-06-11 21:52:01', 'admin', '2026-07-09 16:25:27', '系统监控目录');
+INSERT INTO `sys_menu` VALUES (2, '系统监控', 0, 2, 'monitor', NULL, '', '', 1, 0, 'M', '1', '0', '', 'monitor', 'admin', '2026-06-11 21:52:01', 'dyx', '2026-07-13 22:56:59', '系统监控目录');
 INSERT INTO `sys_menu` VALUES (3, '系统工具', 0, 3, 'tool', NULL, '', '', 1, 0, 'M', '1', '0', '', 'tool', 'admin', '2026-06-11 21:52:01', 'admin', '2026-07-09 16:30:39', '系统工具目录');
 INSERT INTO `sys_menu` VALUES (100, '用户管理', 1, 1, 'user', 'system/user/index', '', '', 1, 0, 'C', '0', '0', 'system:user:list', 'user', 'admin', '2026-06-11 21:52:01', '', NULL, '用户管理菜单');
 INSERT INTO `sys_menu` VALUES (101, '角色管理', 1, 2, 'role', 'system/role/index', '', '', 1, 0, 'C', '0', '0', 'system:role:list', 'peoples', 'admin', '2026-06-11 21:52:01', '', NULL, '角色管理菜单');
 INSERT INTO `sys_menu` VALUES (102, '菜单管理', 1, 3, 'menu', 'system/menu/index', '', '', 1, 0, 'C', '0', '0', 'system:menu:list', 'tree-table', 'admin', '2026-06-11 21:52:01', '', NULL, '菜单管理菜单');
-INSERT INTO `sys_menu` VALUES (103, '部门管理', 1, 4, 'dept', 'system/dept/index', '', '', 1, 0, 'C', '1', '0', 'system:dept:list', 'tree', 'admin', '2026-06-11 21:52:01', 'admin', '2026-07-09 16:31:21', '部门管理菜单');
+INSERT INTO `sys_menu` VALUES (103, '部门管理', 1, 4, 'dept', 'system/dept/index', '', '', 1, 0, 'C', '0', '0', 'system:dept:list', 'tree', 'admin', '2026-06-11 21:52:01', 'admin', '2026-07-14 20:11:40', '部门管理菜单');
 INSERT INTO `sys_menu` VALUES (104, '岗位管理', 1, 5, 'post', 'system/post/index', '', '', 1, 0, 'C', '1', '0', 'system:post:list', 'post', 'admin', '2026-06-11 21:52:01', 'admin', '2026-07-09 16:31:28', '岗位管理菜单');
 INSERT INTO `sys_menu` VALUES (105, '字典管理', 1, 6, 'dict', 'system/dict/index', '', '', 1, 0, 'C', '0', '0', 'system:dict:list', 'dict', 'admin', '2026-06-11 21:52:01', '', NULL, '字典管理菜单');
 INSERT INTO `sys_menu` VALUES (106, '参数设置', 1, 7, 'config', 'system/config/index', '', '', 1, 0, 'C', '0', '0', 'system:config:list', 'edit', 'admin', '2026-06-11 21:52:01', '', NULL, '参数设置菜单');
@@ -991,6 +1053,57 @@ INSERT INTO `sys_menu` VALUES (2005, '资产采购', 2000, 5, 'purchase', 'asset
 INSERT INTO `sys_menu` VALUES (2006, '资产审核', 2000, 6, 'audit', 'asset/audit/index', NULL, '', 1, 0, 'C', '0', '0', NULL, '#', 'admin', '2026-06-28 21:06:57', '', NULL, '');
 INSERT INTO `sys_menu` VALUES (2007, '资产详情', 2000, 7, 'detail', 'asset/detail/index', NULL, '', 1, 0, 'C', '0', '0', '', '#', 'admin', '2026-07-08 16:36:14', 'admin', '2026-07-08 16:59:54', '');
 INSERT INTO `sys_menu` VALUES (2008, '资产报修', 2000, 8, 'repair', 'asset/repair/index', NULL, '', 1, 0, 'C', '0', '0', NULL, '#', 'admin', '2026-07-08 16:37:23', '', NULL, '');
+INSERT INTO `sys_menu` VALUES (2017, '资产单位列表查询', 2001, 1, '', NULL, NULL, '', 1, 0, 'F', '0', '0', 'asset:unit:list', '#', '', NULL, '', NULL, '');
+INSERT INTO `sys_menu` VALUES (2018, '资产单位详情查询', 2001, 2, '', NULL, NULL, '', 1, 0, 'F', '0', '0', 'asset:unit:query', '#', '', NULL, '', NULL, '');
+INSERT INTO `sys_menu` VALUES (2019, '新增资产单位', 2001, 3, '', NULL, NULL, '', 1, 0, 'F', '0', '0', 'asset:unit:add', '#', '', NULL, '', NULL, '');
+INSERT INTO `sys_menu` VALUES (2020, '修改资产单位', 2001, 4, '', NULL, NULL, '', 1, 0, 'F', '0', '0', 'asset:unit:edit', '#', '', NULL, '', NULL, '');
+INSERT INTO `sys_menu` VALUES (2021, '删除资产单位', 2001, 5, '', NULL, NULL, '', 1, 0, 'F', '0', '0', 'asset:unit:remove', '#', '', NULL, '', NULL, '');
+INSERT INTO `sys_menu` VALUES (2022, '导入资产单位数据', 2001, 6, '', NULL, NULL, '', 1, 0, 'F', '0', '0', 'asset:unit:import', '#', '', NULL, '', NULL, '');
+INSERT INTO `sys_menu` VALUES (2023, '下载资产单位导入模板', 2001, 7, '', NULL, NULL, '', 1, 0, 'F', '0', '0', 'asset:unit:template', '#', '', NULL, '', NULL, '');
+INSERT INTO `sys_menu` VALUES (2024, '导出资产单位数据', 2001, 8, '', NULL, NULL, '', 1, 0, 'F', '0', '0', 'asset:unit:export', '#', '', NULL, '', NULL, '');
+INSERT INTO `sys_menu` VALUES (2025, '资产品类列表查询', 2002, 1, '', NULL, NULL, '', 1, 0, 'F', '0', '0', 'asset:category:list', '#', '', NULL, '', NULL, '');
+INSERT INTO `sys_menu` VALUES (2026, '资产品类详情查询', 2002, 2, '', NULL, NULL, '', 1, 0, 'F', '0', '0', 'asset:category:query', '#', '', NULL, '', NULL, '');
+INSERT INTO `sys_menu` VALUES (2027, '新增资产品类', 2002, 3, '', NULL, NULL, '', 1, 0, 'F', '0', '0', 'asset:category:add', '#', '', NULL, '', NULL, '');
+INSERT INTO `sys_menu` VALUES (2028, '修改资产品类', 2002, 4, '', NULL, NULL, '', 1, 0, 'F', '0', '0', 'asset:category:edit', '#', '', NULL, '', NULL, '');
+INSERT INTO `sys_menu` VALUES (2029, '删除资产品类', 2002, 5, '', NULL, NULL, '', 1, 0, 'F', '0', '0', 'asset:category:remove', '#', '', NULL, '', NULL, '');
+INSERT INTO `sys_menu` VALUES (2030, '导出资产品类数据', 2002, 6, '', NULL, NULL, '', 1, 0, 'F', '0', '0', 'asset:category:export', '#', '', NULL, '', NULL, '');
+INSERT INTO `sys_menu` VALUES (2031, '资产供应商列表查询', 2003, 1, '', NULL, NULL, '', 1, 0, 'F', '0', '0', 'asset:supplier:list', '#', '', NULL, '', NULL, '');
+INSERT INTO `sys_menu` VALUES (2032, '资产供应商详情查询', 2003, 2, '', NULL, NULL, '', 1, 0, 'F', '0', '0', 'asset:supplier:query', '#', '', NULL, '', NULL, '');
+INSERT INTO `sys_menu` VALUES (2033, '新增资产供应商', 2003, 3, '', NULL, NULL, '', 1, 0, 'F', '0', '0', 'asset:supplier:add', '#', '', NULL, '', NULL, '');
+INSERT INTO `sys_menu` VALUES (2034, '修改资产供应商', 2003, 4, '', NULL, NULL, '', 1, 0, 'F', '0', '0', 'asset:supplier:edit', '#', '', NULL, '', NULL, '');
+INSERT INTO `sys_menu` VALUES (2035, '删除资产供应商', 2003, 5, '', NULL, NULL, '', 1, 0, 'F', '0', '0', 'asset:supplier:remove', '#', '', NULL, '', NULL, '');
+INSERT INTO `sys_menu` VALUES (2036, '导入资产供应商数据', 2003, 6, '', NULL, NULL, '', 1, 0, 'F', '0', '0', 'asset:supplier:import', '#', '', NULL, '', NULL, '');
+INSERT INTO `sys_menu` VALUES (2037, '下载资产供应商导入模板', 2003, 7, '', NULL, NULL, '', 1, 0, 'F', '0', '0', 'asset:supplier:template', '#', '', NULL, '', NULL, '');
+INSERT INTO `sys_menu` VALUES (2038, '导出资产供应商数据', 2003, 8, '', NULL, NULL, '', 1, 0, 'F', '0', '0', 'asset:supplier:export', '#', '', NULL, '', NULL, '');
+INSERT INTO `sys_menu` VALUES (2039, '资产仓库列表查询', 2004, 1, '', NULL, NULL, '', 1, 0, 'F', '0', '0', 'asset:warehouse:list', '#', '', NULL, '', NULL, '');
+INSERT INTO `sys_menu` VALUES (2040, '资产仓库详情查询', 2004, 2, '', NULL, NULL, '', 1, 0, 'F', '0', '0', 'asset:warehouse:query', '#', '', NULL, '', NULL, '');
+INSERT INTO `sys_menu` VALUES (2041, '新增资产仓库', 2004, 3, '', NULL, NULL, '', 1, 0, 'F', '0', '0', 'asset:warehouse:add', '#', '', NULL, '', NULL, '');
+INSERT INTO `sys_menu` VALUES (2042, '修改资产仓库', 2004, 4, '', NULL, NULL, '', 1, 0, 'F', '0', '0', 'asset:warehouse:edit', '#', '', NULL, '', NULL, '');
+INSERT INTO `sys_menu` VALUES (2043, '删除资产仓库', 2004, 5, '', NULL, NULL, '', 1, 0, 'F', '0', '0', 'asset:warehouse:remove', '#', '', NULL, '', NULL, '');
+INSERT INTO `sys_menu` VALUES (2044, '导入资产仓库数据', 2004, 6, '', NULL, NULL, '', 1, 0, 'F', '0', '0', 'asset:warehouse:import', '#', '', NULL, '', NULL, '');
+INSERT INTO `sys_menu` VALUES (2045, '下载资产仓库导入模板', 2004, 7, '', NULL, NULL, '', 1, 0, 'F', '0', '0', 'asset:warehouse:template', '#', '', NULL, '', NULL, '');
+INSERT INTO `sys_menu` VALUES (2046, '导出资产仓库数据', 2004, 8, '', NULL, NULL, '', 1, 0, 'F', '0', '0', 'asset:warehouse:export', '#', '', NULL, '', NULL, '');
+INSERT INTO `sys_menu` VALUES (2047, '资产采购列表查询', 2005, 1, '', NULL, NULL, '', 1, 0, 'F', '0', '0', 'asset:purchase:list', '#', '', NULL, '', NULL, '');
+INSERT INTO `sys_menu` VALUES (2048, '资产采购详情查询', 2005, 2, '', NULL, NULL, '', 1, 0, 'F', '0', '0', 'asset:purchase:query', '#', '', NULL, '', NULL, '');
+INSERT INTO `sys_menu` VALUES (2049, '新增资产采购', 2005, 3, '', NULL, NULL, '', 1, 0, 'F', '0', '0', 'asset:purchase:add', '#', '', NULL, '', NULL, '');
+INSERT INTO `sys_menu` VALUES (2050, '修改资产采购', 2005, 4, '', NULL, NULL, '', 1, 0, 'F', '0', '0', 'asset:purchase:edit', '#', '', NULL, '', NULL, '');
+INSERT INTO `sys_menu` VALUES (2051, '删除资产采购', 2005, 5, '', NULL, NULL, '', 1, 0, 'F', '0', '0', 'asset:purchase:remove', '#', '', NULL, '', NULL, '');
+INSERT INTO `sys_menu` VALUES (2052, '提交审核', 2005, 6, '', NULL, NULL, '', 1, 0, 'F', '0', '0', 'asset:purchase:submit', '#', '', NULL, '', NULL, '');
+INSERT INTO `sys_menu` VALUES (2053, '入库', 2005, 7, '', NULL, NULL, '', 1, 0, 'F', '0', '0', 'asset:purchase:stock', '#', '', NULL, '', NULL, '');
+INSERT INTO `sys_menu` VALUES (2054, '导出资产采购数据', 2005, 8, '', NULL, NULL, '', 1, 0, 'F', '0', '0', 'asset:purchase:export', '#', '', NULL, '', NULL, '');
+INSERT INTO `sys_menu` VALUES (2055, '资产审核列表查询', 2006, 1, '', NULL, NULL, '', 1, 0, 'F', '0', '0', 'asset:audit:list', '#', '', NULL, '', NULL, '');
+INSERT INTO `sys_menu` VALUES (2056, '审核通过', 2006, 2, '', NULL, NULL, '', 1, 0, 'F', '0', '0', 'asset:audit:pass', '#', '', NULL, '', NULL, '');
+INSERT INTO `sys_menu` VALUES (2057, '审核退回', 2006, 3, '', NULL, NULL, '', 1, 0, 'F', '0', '0', 'asset:audit:reject', '#', '', NULL, '', NULL, '');
+INSERT INTO `sys_menu` VALUES (2058, '导出资产审核数据', 2006, 4, '', NULL, NULL, '', 1, 0, 'F', '0', '0', 'asset:audit:export', '#', '', NULL, '', NULL, '');
+INSERT INTO `sys_menu` VALUES (2059, '资产明细列表查询', 2007, 1, '', NULL, NULL, '', 1, 0, 'F', '0', '0', 'asset:detail:list', '#', '', NULL, '', NULL, '');
+INSERT INTO `sys_menu` VALUES (2060, '资产明细详情查询', 2007, 2, '', NULL, NULL, '', 1, 0, 'F', '0', '0', 'asset:detail:query', '#', '', NULL, '', NULL, '');
+INSERT INTO `sys_menu` VALUES (2061, '出库', 2007, 3, '', NULL, NULL, '', 1, 0, 'F', '0', '0', 'asset:detail:out', '#', '', NULL, '', NULL, '');
+INSERT INTO `sys_menu` VALUES (2062, '报修', 2007, 4, '', NULL, NULL, '', 1, 0, 'F', '0', '0', 'asset:detail:repair', '#', '', NULL, '', NULL, '');
+INSERT INTO `sys_menu` VALUES (2063, '导出资产明细数据', 2007, 5, '', NULL, NULL, '', 1, 0, 'F', '0', '0', 'asset:detail:export', '#', '', NULL, '', NULL, '');
+INSERT INTO `sys_menu` VALUES (2064, '资产报修列表查询', 2008, 1, '', NULL, NULL, '', 1, 0, 'F', '0', '0', 'asset:repair:list', '#', '', NULL, '', NULL, '');
+INSERT INTO `sys_menu` VALUES (2065, '资产报修详情查询', 2008, 2, '', NULL, NULL, '', 1, 0, 'F', '0', '0', 'asset:repair:query', '#', '', NULL, '', NULL, '');
+INSERT INTO `sys_menu` VALUES (2066, '导出资产报修数据', 2008, 3, '', NULL, NULL, '', 1, 0, 'F', '0', '0', 'asset:repair:export', '#', '', NULL, '', NULL, '');
+INSERT INTO `sys_menu` VALUES (2100, '修改维修状态', 2008, 1, '', '', '', '', 1, 0, 'F', '0', '0', 'asset:repair:edit', '#', 'admin', '2026-07-14 19:21:19', '', NULL, '');
 
 -- ----------------------------
 -- Table structure for sys_notice
@@ -1061,7 +1174,7 @@ CREATE TABLE `sys_oper_log`  (
   INDEX `idx_sys_oper_log_bt`(`business_type` ASC) USING BTREE,
   INDEX `idx_sys_oper_log_s`(`status` ASC) USING BTREE,
   INDEX `idx_sys_oper_log_ot`(`oper_time` ASC) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 132 CHARACTER SET = utf8mb3 COLLATE = utf8mb3_general_ci COMMENT = '操作日志记录' ROW_FORMAT = Dynamic;
+) ENGINE = InnoDB AUTO_INCREMENT = 170 CHARACTER SET = utf8mb3 COLLATE = utf8mb3_general_ci COMMENT = '操作日志记录' ROW_FORMAT = Dynamic;
 
 -- ----------------------------
 -- Records of sys_oper_log
@@ -1098,6 +1211,44 @@ INSERT INTO `sys_oper_log` VALUES (128, '菜单管理', 2, 'com.ruoyi.web.contro
 INSERT INTO `sys_oper_log` VALUES (129, '菜单管理', 2, 'com.ruoyi.web.controller.system.SysMenuController.edit()', 'PUT', 1, 'admin', '研发部门', '/system/menu', '192.168.1.9', '内网IP', '{\"children\":[],\"component\":\"system/dept/index\",\"createTime\":\"2026-06-11 21:52:01\",\"icon\":\"tree\",\"isCache\":\"0\",\"isFrame\":\"1\",\"menuId\":103,\"menuName\":\"部门管理\",\"menuType\":\"C\",\"orderNum\":4,\"params\":{},\"parentId\":1,\"path\":\"dept\",\"perms\":\"system:dept:list\",\"query\":\"\",\"routeName\":\"\",\"status\":\"0\",\"updateBy\":\"admin\",\"visible\":\"1\"} ', '{\"msg\":\"操作成功\",\"code\":200}', 0, NULL, '2026-07-09 16:31:21', 15);
 INSERT INTO `sys_oper_log` VALUES (130, '菜单管理', 2, 'com.ruoyi.web.controller.system.SysMenuController.edit()', 'PUT', 1, 'admin', '研发部门', '/system/menu', '192.168.1.9', '内网IP', '{\"children\":[],\"component\":\"system/post/index\",\"createTime\":\"2026-06-11 21:52:01\",\"icon\":\"post\",\"isCache\":\"0\",\"isFrame\":\"1\",\"menuId\":104,\"menuName\":\"岗位管理\",\"menuType\":\"C\",\"orderNum\":5,\"params\":{},\"parentId\":1,\"path\":\"post\",\"perms\":\"system:post:list\",\"query\":\"\",\"routeName\":\"\",\"status\":\"0\",\"updateBy\":\"admin\",\"visible\":\"1\"} ', '{\"msg\":\"操作成功\",\"code\":200}', 0, NULL, '2026-07-09 16:31:28', 14);
 INSERT INTO `sys_oper_log` VALUES (131, '菜单管理', 2, 'com.ruoyi.web.controller.system.SysMenuController.edit()', 'PUT', 1, 'admin', '研发部门', '/system/menu', '192.168.1.9', '内网IP', '{\"children\":[],\"component\":\"system/notice/index\",\"createTime\":\"2026-06-11 21:52:01\",\"icon\":\"message\",\"isCache\":\"0\",\"isFrame\":\"1\",\"menuId\":107,\"menuName\":\"通知公告\",\"menuType\":\"C\",\"orderNum\":8,\"params\":{},\"parentId\":1,\"path\":\"notice\",\"perms\":\"system:notice:list\",\"query\":\"\",\"routeName\":\"\",\"status\":\"0\",\"updateBy\":\"admin\",\"visible\":\"1\"} ', '{\"msg\":\"操作成功\",\"code\":200}', 0, NULL, '2026-07-09 16:31:32', 14);
+INSERT INTO `sys_oper_log` VALUES (132, '菜单管理', 1, 'com.ruoyi.web.controller.system.SysMenuController.add()', 'POST', 1, 'dyx', '测试部门', '/system/menu', '127.0.0.1', '内网IP', '{\"children\":[],\"isCache\":\"0\",\"isFrame\":\"1\",\"menuName\":\"资产管理\",\"menuType\":\"M\",\"orderNum\":4,\"params\":{},\"parentId\":0,\"path\":\"asset\",\"status\":\"0\",\"visible\":\"0\"} ', '{\"msg\":\"新增菜单\'资产管理\'失败，路由名称或地址已存在\",\"code\":500}', 0, NULL, '2026-07-13 22:45:33', 27);
+INSERT INTO `sys_oper_log` VALUES (133, '菜单管理', 1, 'com.ruoyi.web.controller.system.SysMenuController.add()', 'POST', 1, 'dyx', '测试部门', '/system/menu', '127.0.0.1', '内网IP', '{\"children\":[],\"isCache\":\"0\",\"isFrame\":\"1\",\"menuName\":\"资产管理\",\"menuType\":\"M\",\"orderNum\":4,\"params\":{},\"parentId\":0,\"path\":\"asset\",\"status\":\"0\",\"visible\":\"0\"} ', '{\"msg\":\"新增菜单\'资产管理\'失败，路由名称或地址已存在\",\"code\":500}', 0, NULL, '2026-07-13 22:52:26', 6);
+INSERT INTO `sys_oper_log` VALUES (134, '菜单管理', 1, 'com.ruoyi.web.controller.system.SysMenuController.add()', 'POST', 1, 'dyx', '测试部门', '/system/menu', '127.0.0.1', '内网IP', '{\"children\":[],\"isCache\":\"0\",\"isFrame\":\"1\",\"menuName\":\"资产管理\",\"menuType\":\"M\",\"orderNum\":10,\"params\":{},\"parentId\":0,\"path\":\"asset\",\"status\":\"0\",\"visible\":\"0\"} ', '{\"msg\":\"新增菜单\'资产管理\'失败，路由名称或地址已存在\",\"code\":500}', 0, NULL, '2026-07-13 22:54:06', 5);
+INSERT INTO `sys_oper_log` VALUES (135, '菜单管理', 1, 'com.ruoyi.web.controller.system.SysMenuController.add()', 'POST', 1, 'dyx', '测试部门', '/system/menu', '127.0.0.1', '内网IP', '{\"children\":[],\"isCache\":\"0\",\"isFrame\":\"1\",\"menuName\":\"资产管理\",\"menuType\":\"M\",\"orderNum\":10,\"params\":{},\"parentId\":0,\"path\":\"asset\",\"status\":\"0\",\"visible\":\"0\"} ', '{\"msg\":\"新增菜单\'资产管理\'失败，路由名称或地址已存在\",\"code\":500}', 0, NULL, '2026-07-13 22:54:11', 8);
+INSERT INTO `sys_oper_log` VALUES (136, '菜单管理', 2, 'com.ruoyi.web.controller.system.SysMenuController.edit()', 'PUT', 1, 'dyx', '测试部门', '/system/menu', '127.0.0.1', '内网IP', '{\"children\":[],\"createTime\":\"2026-06-11 21:52:01\",\"icon\":\"monitor\",\"isCache\":\"0\",\"isFrame\":\"1\",\"menuId\":2,\"menuName\":\"系统监控\",\"menuType\":\"M\",\"orderNum\":2,\"params\":{},\"parentId\":0,\"path\":\"monitor\",\"perms\":\"\",\"query\":\"\",\"routeName\":\"\",\"status\":\"0\",\"updateBy\":\"dyx\",\"visible\":\"1\"} ', '{\"msg\":\"操作成功\",\"code\":200}', 0, NULL, '2026-07-13 22:56:59', 16);
+INSERT INTO `sys_oper_log` VALUES (137, '用户头像', 2, 'com.ruoyi.web.controller.system.SysProfileController.avatar()', 'POST', 1, 'dyx', '测试部门', '/system/user/profile/avatar', '192.168.1.9', '内网IP', '', '{\"msg\":\"操作成功\",\"imgUrl\":\"/profile/avatar/2026/07/14/67e9019f87a742fd978ea1f8b79b942c.jpg\",\"code\":200}', 0, NULL, '2026-07-14 00:28:09', 105);
+INSERT INTO `sys_oper_log` VALUES (138, '个人信息', 2, 'com.ruoyi.web.controller.system.SysProfileController.updateProfile()', 'PUT', 1, 'dyx', '测试部门', '/system/user/profile', '192.168.1.9', '内网IP', '{\"admin\":false,\"email\":\"dyx@qq.com\",\"nickName\":\"邓永鑫\",\"params\":{},\"phonenumber\":\"15666666666\",\"sex\":\"0\"} ', '{\"msg\":\"操作成功\",\"code\":200}', 0, NULL, '2026-07-14 00:28:11', 21);
+INSERT INTO `sys_oper_log` VALUES (139, '用户管理', 1, 'com.ruoyi.web.controller.system.SysUserController.add()', 'POST', 1, 'admin', '研发部门', '/system/user', '127.0.0.1', '内网IP', '{\"admin\":false,\"createBy\":\"admin\",\"deptId\":105,\"nickName\":\"牛马\",\"params\":{},\"postIds\":[4],\"roleIds\":[2],\"sex\":\"0\",\"status\":\"0\",\"userId\":101,\"userName\":\"牛马\"} ', '{\"msg\":\"操作成功\",\"code\":200}', 0, NULL, '2026-07-14 17:16:19', 145);
+INSERT INTO `sys_oper_log` VALUES (140, '用户管理', 3, 'com.ruoyi.web.controller.system.SysUserController.remove()', 'DELETE', 1, 'admin', '研发部门', '/system/user/101', '127.0.0.1', '内网IP', '[101] ', '{\"msg\":\"操作成功\",\"code\":200}', 0, NULL, '2026-07-14 17:17:07', 17);
+INSERT INTO `sys_oper_log` VALUES (141, '用户管理', 1, 'com.ruoyi.web.controller.system.SysUserController.add()', 'POST', 1, 'admin', '研发部门', '/system/user', '127.0.0.1', '内网IP', '{\"admin\":false,\"createBy\":\"admin\",\"nickName\":\"牛马\",\"params\":{},\"postIds\":[],\"roleIds\":[],\"status\":\"0\",\"userId\":102,\"userName\":\"niuma\"} ', '{\"msg\":\"操作成功\",\"code\":200}', 0, NULL, '2026-07-14 17:17:22', 103);
+INSERT INTO `sys_oper_log` VALUES (142, '用户管理', 2, 'com.ruoyi.web.controller.system.SysUserController.edit()', 'PUT', 1, 'admin', '研发部门', '/system/user', '127.0.0.1', '内网IP', '{\"admin\":false,\"avatar\":\"\",\"createBy\":\"admin\",\"createTime\":\"2026-07-14 17:17:22\",\"delFlag\":\"0\",\"email\":\"\",\"loginDate\":\"2026-07-14 17:17:59\",\"loginIp\":\"192.168.0.100\",\"nickName\":\"牛马\",\"params\":{},\"phonenumber\":\"\",\"postIds\":[],\"roleIds\":[2],\"roles\":[],\"sex\":\"0\",\"status\":\"0\",\"updateBy\":\"admin\",\"userId\":102,\"userName\":\"niuma\"} ', '{\"msg\":\"操作成功\",\"code\":200}', 0, NULL, '2026-07-14 17:18:21', 22);
+INSERT INTO `sys_oper_log` VALUES (143, '个人信息', 2, 'com.ruoyi.web.controller.system.SysProfileController.updatePwd()', 'PUT', 1, 'dyx', '测试部门', '/system/user/profile/updatePwd', '192.168.0.100', '内网IP', '{} ', '{\"msg\":\"修改密码失败，旧密码错误\",\"code\":500}', 0, NULL, '2026-07-14 17:21:22', 96);
+INSERT INTO `sys_oper_log` VALUES (144, '个人信息', 2, 'com.ruoyi.web.controller.system.SysProfileController.updatePwd()', 'PUT', 1, 'niuma', NULL, '/system/user/profile/updatePwd', '192.168.0.100', '内网IP', '{} ', '{\"msg\":\"操作成功\",\"code\":200}', 0, NULL, '2026-07-14 17:22:07', 283);
+INSERT INTO `sys_oper_log` VALUES (145, '资产报修', 2, 'com.ruoyi.asset.controller.AssetRepairController.updateRepairStatus()', 'PUT', 1, 'admin', '研发部门', '/repair/12/1', '127.0.0.1', '内网IP', '12 \"1\" ', '{\"code\":200,\"msg\":\"修改维修状态成功\"}', 0, NULL, '2026-07-14 19:23:29', 34);
+INSERT INTO `sys_oper_log` VALUES (146, '资产报修', 2, 'com.ruoyi.asset.controller.AssetRepairController.updateRepairStatus()', 'PUT', 1, 'admin', '研发部门', '/repair/14/2', '127.0.0.1', '内网IP', '14 \"2\" ', '{\"code\":200,\"msg\":\"修改维修状态成功\"}', 0, NULL, '2026-07-14 19:39:40', 44);
+INSERT INTO `sys_oper_log` VALUES (147, '资产报修', 2, 'com.ruoyi.asset.controller.AssetRepairController.updateRepairStatus()', 'PUT', 1, 'admin', '研发部门', '/repair/17/2', '127.0.0.1', '内网IP', '17 \"2\" ', '{\"code\":200,\"msg\":\"修改维修状态成功\"}', 0, NULL, '2026-07-14 19:50:13', 31);
+INSERT INTO `sys_oper_log` VALUES (148, '角色管理', 1, 'com.ruoyi.web.controller.system.SysRoleController.add()', 'POST', 1, 'admin', '研发部门', '/system/role', '127.0.0.1', '内网IP', '{\"admin\":false,\"createBy\":\"admin\",\"deptCheckStrictly\":true,\"deptIds\":[],\"flag\":false,\"menuCheckStrictly\":true,\"menuIds\":[2000,2008,2064,2100,2065,2066],\"params\":{},\"roleId\":100,\"roleKey\":\"@ss.hasPermi(\'asset:repair:edit\')\",\"roleName\":\"维修人员\",\"roleSort\":3,\"status\":\"0\"} ', '{\"msg\":\"操作成功\",\"code\":200}', 0, NULL, '2026-07-14 19:54:03', 26);
+INSERT INTO `sys_oper_log` VALUES (149, '用户管理', 1, 'com.ruoyi.web.controller.system.SysUserController.add()', 'POST', 1, 'admin', '研发部门', '/system/user', '127.0.0.1', '内网IP', '{\"admin\":false,\"createBy\":\"admin\",\"nickName\":\"杰弟师傅\",\"params\":{},\"postIds\":[],\"roleIds\":[100],\"sex\":\"0\",\"status\":\"0\",\"userId\":103,\"userName\":\"jiedi\"} ', '{\"msg\":\"操作成功\",\"code\":200}', 0, NULL, '2026-07-14 19:56:17', 115);
+INSERT INTO `sys_oper_log` VALUES (150, '个人信息', 2, 'com.ruoyi.web.controller.system.SysProfileController.updatePwd()', 'PUT', 1, 'jiedi', NULL, '/system/user/profile/updatePwd', '192.168.0.100', '内网IP', '{} ', '{\"msg\":\"操作成功\",\"code\":200}', 0, NULL, '2026-07-14 19:57:21', 286);
+INSERT INTO `sys_oper_log` VALUES (151, '用户头像', 2, 'com.ruoyi.web.controller.system.SysProfileController.avatar()', 'POST', 1, 'jiedi', NULL, '/system/user/profile/avatar', '192.168.0.100', '内网IP', '', '{\"msg\":\"操作成功\",\"imgUrl\":\"/profile/avatar/2026/07/14/ec61a7e3ff574beb96d60bfe66e1eb83.jpg\",\"code\":200}', 0, NULL, '2026-07-14 19:59:03', 127);
+INSERT INTO `sys_oper_log` VALUES (152, '个人信息', 2, 'com.ruoyi.web.controller.system.SysProfileController.updatePwd()', 'PUT', 1, 'jiedi', NULL, '/system/user/profile/updatePwd', '192.168.0.100', '内网IP', '{} ', '{\"msg\":\"修改密码失败，旧密码错误\",\"code\":500}', 0, NULL, '2026-07-14 19:59:05', 98);
+INSERT INTO `sys_oper_log` VALUES (153, '资产报修', 2, 'com.ruoyi.asset.controller.AssetRepairController.updateRepairStatus()', 'PUT', 1, 'jiedi', NULL, '/repair/16/1', '192.168.0.100', '内网IP', '16 \"1\" ', '{\"code\":200,\"msg\":\"修改维修状态成功\"}', 0, NULL, '2026-07-14 20:06:19', 38);
+INSERT INTO `sys_oper_log` VALUES (154, '用户管理', 2, 'com.ruoyi.web.controller.system.SysUserController.edit()', 'PUT', 1, 'admin', '研发部门', '/system/user', '127.0.0.1', '内网IP', '{\"admin\":false,\"avatar\":\"\",\"createBy\":\"admin\",\"createTime\":\"2026-07-14 17:17:22\",\"delFlag\":\"0\",\"deptId\":107,\"email\":\"\",\"loginDate\":\"2026-07-14 20:08:06\",\"loginIp\":\"192.168.0.100\",\"nickName\":\"牛马\",\"params\":{},\"phonenumber\":\"\",\"postIds\":[3],\"pwdUpdateDate\":\"2026-07-14 17:22:07\",\"roleIds\":[2],\"roles\":[{\"admin\":false,\"dataScope\":\"2\",\"deptCheckStrictly\":false,\"flag\":false,\"menuCheckStrictly\":false,\"params\":{},\"roleId\":2,\"roleKey\":\"common\",\"roleName\":\"普通角色\",\"roleSort\":2,\"status\":\"0\"}],\"sex\":\"0\",\"status\":\"0\",\"updateBy\":\"admin\",\"updateTime\":\"2026-07-14 17:22:07\",\"userId\":102,\"userName\":\"niuma\"} ', '{\"msg\":\"操作成功\",\"code\":200}', 0, NULL, '2026-07-14 20:10:48', 49);
+INSERT INTO `sys_oper_log` VALUES (155, '菜单管理', 2, 'com.ruoyi.web.controller.system.SysMenuController.edit()', 'PUT', 1, 'admin', '研发部门', '/system/menu', '127.0.0.1', '内网IP', '{\"children\":[],\"component\":\"system/dept/index\",\"createTime\":\"2026-06-11 21:52:01\",\"icon\":\"tree\",\"isCache\":\"0\",\"isFrame\":\"1\",\"menuId\":103,\"menuName\":\"部门管理\",\"menuType\":\"C\",\"orderNum\":4,\"params\":{},\"parentId\":1,\"path\":\"dept\",\"perms\":\"system:dept:list\",\"query\":\"\",\"routeName\":\"\",\"status\":\"0\",\"updateBy\":\"admin\",\"visible\":\"0\"} ', '{\"msg\":\"操作成功\",\"code\":200}', 0, NULL, '2026-07-14 20:11:40', 21);
+INSERT INTO `sys_oper_log` VALUES (156, '部门管理', 1, 'com.ruoyi.web.controller.system.SysDeptController.add()', 'POST', 1, 'admin', '研发部门', '/system/dept', '127.0.0.1', '内网IP', '{\"ancestors\":\"0,100,101\",\"children\":[],\"createBy\":\"admin\",\"deptName\":\"维修部门\",\"leader\":\"杰弟\",\"orderNum\":6,\"params\":{},\"parentId\":101,\"status\":\"0\"} ', '{\"msg\":\"操作成功\",\"code\":200}', 0, NULL, '2026-07-14 20:12:41', 18);
+INSERT INTO `sys_oper_log` VALUES (157, '用户管理', 2, 'com.ruoyi.web.controller.system.SysUserController.edit()', 'PUT', 1, 'admin', '研发部门', '/system/user', '127.0.0.1', '内网IP', '{\"admin\":false,\"avatar\":\"/profile/avatar/2026/07/14/ec61a7e3ff574beb96d60bfe66e1eb83.jpg\",\"createBy\":\"admin\",\"createTime\":\"2026-07-14 19:56:17\",\"delFlag\":\"0\",\"deptId\":200,\"email\":\"\",\"loginDate\":\"2026-07-14 19:57:05\",\"loginIp\":\"192.168.0.100\",\"nickName\":\"杰弟师傅\",\"params\":{},\"phonenumber\":\"\",\"postIds\":[2],\"pwdUpdateDate\":\"2026-07-14 19:57:20\",\"roleIds\":[100],\"roles\":[{\"admin\":false,\"dataScope\":\"1\",\"deptCheckStrictly\":false,\"flag\":false,\"menuCheckStrictly\":false,\"params\":{},\"roleId\":100,\"roleKey\":\"@ss.hasPermi(\'asset:repair:edit\')\",\"roleName\":\"维修人员\",\"roleSort\":3,\"status\":\"0\"}],\"sex\":\"0\",\"status\":\"0\",\"updateBy\":\"admin\",\"updateTime\":\"2026-07-14 19:59:03\",\"userId\":103,\"userName\":\"jiedi\"} ', '{\"msg\":\"操作成功\",\"code\":200}', 0, NULL, '2026-07-14 20:13:09', 18);
+INSERT INTO `sys_oper_log` VALUES (158, '部门管理', 1, 'com.ruoyi.web.controller.system.SysDeptController.add()', 'POST', 1, 'admin', '研发部门', '/system/dept', '127.0.0.1', '内网IP', '{\"ancestors\":\"0,100\",\"children\":[],\"createBy\":\"admin\",\"deptName\":\"董事长办公室\",\"orderNum\":3,\"params\":{},\"parentId\":100,\"status\":\"0\"} ', '{\"msg\":\"操作成功\",\"code\":200}', 0, NULL, '2026-07-14 20:14:19', 9);
+INSERT INTO `sys_oper_log` VALUES (159, '部门管理', 2, 'com.ruoyi.web.controller.system.SysDeptController.edit()', 'PUT', 1, 'admin', '研发部门', '/system/dept', '127.0.0.1', '内网IP', '{\"ancestors\":\"0,100\",\"children\":[],\"deptId\":201,\"deptName\":\"总裁办\",\"leader\":\"牛马\",\"orderNum\":3,\"params\":{},\"parentId\":100,\"parentName\":\"若依科技\",\"status\":\"0\",\"updateBy\":\"admin\"} ', '{\"msg\":\"操作成功\",\"code\":200}', 0, NULL, '2026-07-14 20:14:52', 20);
+INSERT INTO `sys_oper_log` VALUES (160, '部门管理', 1, 'com.ruoyi.web.controller.system.SysDeptController.add()', 'POST', 1, 'admin', '研发部门', '/system/dept', '127.0.0.1', '内网IP', '{\"ancestors\":\"0,100,201\",\"children\":[],\"createBy\":\"admin\",\"deptName\":\"秘书处\",\"leader\":\"牛马\",\"orderNum\":0,\"params\":{},\"parentId\":201,\"status\":\"0\"} ', '{\"msg\":\"操作成功\",\"code\":200}', 0, NULL, '2026-07-14 20:15:44', 9);
+INSERT INTO `sys_oper_log` VALUES (161, '部门管理', 2, 'com.ruoyi.web.controller.system.SysDeptController.edit()', 'PUT', 1, 'admin', '研发部门', '/system/dept', '127.0.0.1', '内网IP', '{\"ancestors\":\"0,100\",\"children\":[],\"deptId\":201,\"deptName\":\"总裁办\",\"leader\":\"\",\"orderNum\":3,\"params\":{},\"parentId\":100,\"parentName\":\"若依科技\",\"status\":\"0\",\"updateBy\":\"admin\"} ', '{\"msg\":\"操作成功\",\"code\":200}', 0, NULL, '2026-07-14 20:15:54', 22);
+INSERT INTO `sys_oper_log` VALUES (162, '部门管理', 1, 'com.ruoyi.web.controller.system.SysDeptController.add()', 'POST', 1, 'admin', '研发部门', '/system/dept', '127.0.0.1', '内网IP', '{\"ancestors\":\"0,100\",\"children\":[],\"createBy\":\"admin\",\"deptName\":\"安保部\",\"leader\":\"杰弟\",\"orderNum\":4,\"params\":{},\"parentId\":100,\"status\":\"0\"} ', '{\"msg\":\"操作成功\",\"code\":200}', 0, NULL, '2026-07-14 20:16:35', 8);
+INSERT INTO `sys_oper_log` VALUES (163, '部门管理', 1, 'com.ruoyi.web.controller.system.SysDeptController.add()', 'POST', 1, 'admin', '研发部门', '/system/dept', '127.0.0.1', '内网IP', '{\"ancestors\":\"0,100,203\",\"children\":[],\"createBy\":\"admin\",\"deptName\":\"中层管理\",\"leader\":\"杰弟\",\"orderNum\":0,\"params\":{},\"parentId\":203,\"status\":\"0\"} ', '{\"msg\":\"操作成功\",\"code\":200}', 0, NULL, '2026-07-14 20:17:58', 7);
+INSERT INTO `sys_oper_log` VALUES (164, '用户管理', 2, 'com.ruoyi.web.controller.system.SysUserController.edit()', 'PUT', 1, 'admin', '研发部门', '/system/user', '127.0.0.1', '内网IP', '{\"admin\":false,\"avatar\":\"/profile/avatar/2026/07/14/ec61a7e3ff574beb96d60bfe66e1eb83.jpg\",\"createBy\":\"admin\",\"createTime\":\"2026-07-14 19:56:17\",\"delFlag\":\"0\",\"dept\":{\"ancestors\":\"0,100,101\",\"children\":[],\"deptId\":200,\"deptName\":\"维修部门\",\"leader\":\"杰弟\",\"orderNum\":6,\"params\":{},\"parentId\":101,\"status\":\"0\"},\"deptId\":200,\"email\":\"\",\"loginDate\":\"2026-07-14 19:57:05\",\"loginIp\":\"192.168.0.100\",\"nickName\":\"维修师傅\",\"params\":{},\"phonenumber\":\"\",\"postIds\":[2],\"pwdUpdateDate\":\"2026-07-14 19:57:20\",\"roleIds\":[100],\"roles\":[{\"admin\":false,\"dataScope\":\"1\",\"deptCheckStrictly\":false,\"flag\":false,\"menuCheckStrictly\":false,\"params\":{},\"roleId\":100,\"roleKey\":\"@ss.hasPermi(\'asset:repair:edit\')\",\"roleName\":\"维修人员\",\"roleSort\":3,\"status\":\"0\"}],\"sex\":\"0\",\"status\":\"0\",\"updateBy\":\"admin\",\"updateTime\":\"2026-07-14 20:13:09\",\"userId\":103,\"userName\":\"jiedi\"} ', '{\"msg\":\"操作成功\",\"code\":200}', 0, NULL, '2026-07-14 20:18:32', 19);
+INSERT INTO `sys_oper_log` VALUES (165, '用户管理', 2, 'com.ruoyi.web.controller.system.SysUserController.edit()', 'PUT', 1, 'admin', '研发部门', '/system/user', '127.0.0.1', '内网IP', '{\"admin\":false,\"avatar\":\"/profile/avatar/2026/07/14/ec61a7e3ff574beb96d60bfe66e1eb83.jpg\",\"createBy\":\"admin\",\"createTime\":\"2026-07-14 19:56:17\",\"delFlag\":\"0\",\"dept\":{\"ancestors\":\"0,100,101\",\"children\":[],\"deptId\":200,\"deptName\":\"维修部门\",\"leader\":\"杰弟\",\"orderNum\":6,\"params\":{},\"parentId\":101,\"status\":\"0\"},\"deptId\":200,\"email\":\"\",\"loginDate\":\"2026-07-14 19:57:05\",\"loginIp\":\"192.168.0.100\",\"nickName\":\"维修杰师傅\",\"params\":{},\"phonenumber\":\"\",\"postIds\":[2],\"pwdUpdateDate\":\"2026-07-14 19:57:20\",\"roleIds\":[100],\"roles\":[{\"admin\":false,\"dataScope\":\"1\",\"deptCheckStrictly\":false,\"flag\":false,\"menuCheckStrictly\":false,\"params\":{},\"roleId\":100,\"roleKey\":\"@ss.hasPermi(\'asset:repair:edit\')\",\"roleName\":\"维修人员\",\"roleSort\":3,\"status\":\"0\"}],\"sex\":\"0\",\"status\":\"0\",\"updateBy\":\"admin\",\"updateTime\":\"2026-07-14 20:18:32\",\"userId\":103,\"userName\":\"jiedi\"} ', '{\"msg\":\"操作成功\",\"code\":200}', 0, NULL, '2026-07-14 20:18:54', 19);
+INSERT INTO `sys_oper_log` VALUES (166, '部门管理', 3, 'com.ruoyi.web.controller.system.SysDeptController.remove()', 'DELETE', 1, 'admin', '研发部门', '/system/dept/204', '127.0.0.1', '内网IP', '204 ', '{\"msg\":\"操作成功\",\"code\":200}', 0, NULL, '2026-07-14 20:20:00', 11);
+INSERT INTO `sys_oper_log` VALUES (167, '用户管理', 1, 'com.ruoyi.web.controller.system.SysUserController.add()', 'POST', 1, 'admin', '研发部门', '/system/user', '127.0.0.1', '内网IP', '{\"admin\":false,\"createBy\":\"admin\",\"deptId\":203,\"nickName\":\"小弟杰\",\"params\":{},\"postIds\":[2],\"roleIds\":[2],\"sex\":\"0\",\"status\":\"0\",\"userId\":104,\"userName\":\"xiaodijie\"} ', '{\"msg\":\"操作成功\",\"code\":200}', 0, NULL, '2026-07-14 20:20:37', 100);
+INSERT INTO `sys_oper_log` VALUES (168, '用户管理', 2, 'com.ruoyi.web.controller.system.SysUserController.edit()', 'PUT', 1, 'admin', '研发部门', '/system/user', '127.0.0.1', '内网IP', '{\"admin\":false,\"avatar\":\"\",\"createBy\":\"admin\",\"createTime\":\"2026-07-14 17:17:22\",\"delFlag\":\"0\",\"dept\":{\"ancestors\":\"0,100,101\",\"children\":[],\"deptId\":107,\"deptName\":\"运维部门\",\"leader\":\"若依\",\"orderNum\":5,\"params\":{},\"parentId\":101,\"status\":\"0\"},\"deptId\":202,\"email\":\"\",\"loginDate\":\"2026-07-14 20:08:06\",\"loginIp\":\"192.168.0.100\",\"nickName\":\"牛马\",\"params\":{},\"phonenumber\":\"\",\"postIds\":[3],\"pwdUpdateDate\":\"2026-07-14 17:22:07\",\"remark\":\"董事长秘书\",\"roleIds\":[2],\"roles\":[{\"admin\":false,\"dataScope\":\"2\",\"deptCheckStrictly\":false,\"flag\":false,\"menuCheckStrictly\":false,\"params\":{},\"roleId\":2,\"roleKey\":\"common\",\"roleName\":\"普通角色\",\"roleSort\":2,\"status\":\"0\"}],\"sex\":\"0\",\"status\":\"0\",\"updateBy\":\"admin\",\"updateTime\":\"2026-07-14 20:10:48\",\"userId\":102,\"userName\":\"niuma\"} ', '{\"msg\":\"操作成功\",\"code\":200}', 0, NULL, '2026-07-14 20:21:12', 16);
+INSERT INTO `sys_oper_log` VALUES (169, '用户管理', 3, 'com.ruoyi.web.controller.system.SysUserController.remove()', 'DELETE', 1, 'admin', '研发部门', '/system/user/104', '127.0.0.1', '内网IP', '[104] ', '{\"msg\":\"操作成功\",\"code\":200}', 0, NULL, '2026-07-14 20:21:35', 12);
 
 -- ----------------------------
 -- Table structure for sys_post
@@ -1145,13 +1296,14 @@ CREATE TABLE `sys_role`  (
   `update_time` datetime NULL DEFAULT NULL COMMENT '更新时间',
   `remark` varchar(500) CHARACTER SET utf8mb3 COLLATE utf8mb3_general_ci NULL DEFAULT NULL COMMENT '备注',
   PRIMARY KEY (`role_id`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 100 CHARACTER SET = utf8mb3 COLLATE = utf8mb3_general_ci COMMENT = '角色信息表' ROW_FORMAT = Dynamic;
+) ENGINE = InnoDB AUTO_INCREMENT = 101 CHARACTER SET = utf8mb3 COLLATE = utf8mb3_general_ci COMMENT = '角色信息表' ROW_FORMAT = Dynamic;
 
 -- ----------------------------
 -- Records of sys_role
 -- ----------------------------
 INSERT INTO `sys_role` VALUES (1, '超级管理员', 'admin', 1, '1', 1, 1, '0', '0', 'admin', '2026-06-11 21:52:01', '', NULL, '超级管理员');
 INSERT INTO `sys_role` VALUES (2, '普通角色', 'common', 2, '2', 1, 1, '0', '0', 'admin', '2026-06-11 21:52:01', 'admin', '2026-06-13 22:11:40', '普通角色');
+INSERT INTO `sys_role` VALUES (100, '维修人员', '@ss.hasPermi(\'asset:repair:edit\')', 3, '1', 1, 1, '0', '0', 'admin', '2026-07-14 19:54:03', '', NULL, NULL);
 
 -- ----------------------------
 -- Table structure for sys_role_dept
@@ -1183,89 +1335,48 @@ CREATE TABLE `sys_role_menu`  (
 -- ----------------------------
 -- Records of sys_role_menu
 -- ----------------------------
-INSERT INTO `sys_role_menu` VALUES (2, 1);
-INSERT INTO `sys_role_menu` VALUES (2, 2);
-INSERT INTO `sys_role_menu` VALUES (2, 3);
-INSERT INTO `sys_role_menu` VALUES (2, 100);
-INSERT INTO `sys_role_menu` VALUES (2, 101);
-INSERT INTO `sys_role_menu` VALUES (2, 102);
-INSERT INTO `sys_role_menu` VALUES (2, 103);
-INSERT INTO `sys_role_menu` VALUES (2, 104);
-INSERT INTO `sys_role_menu` VALUES (2, 105);
-INSERT INTO `sys_role_menu` VALUES (2, 106);
-INSERT INTO `sys_role_menu` VALUES (2, 107);
-INSERT INTO `sys_role_menu` VALUES (2, 108);
-INSERT INTO `sys_role_menu` VALUES (2, 109);
-INSERT INTO `sys_role_menu` VALUES (2, 110);
-INSERT INTO `sys_role_menu` VALUES (2, 111);
-INSERT INTO `sys_role_menu` VALUES (2, 112);
-INSERT INTO `sys_role_menu` VALUES (2, 113);
-INSERT INTO `sys_role_menu` VALUES (2, 114);
-INSERT INTO `sys_role_menu` VALUES (2, 115);
-INSERT INTO `sys_role_menu` VALUES (2, 116);
-INSERT INTO `sys_role_menu` VALUES (2, 500);
-INSERT INTO `sys_role_menu` VALUES (2, 501);
-INSERT INTO `sys_role_menu` VALUES (2, 1000);
-INSERT INTO `sys_role_menu` VALUES (2, 1001);
-INSERT INTO `sys_role_menu` VALUES (2, 1002);
-INSERT INTO `sys_role_menu` VALUES (2, 1003);
-INSERT INTO `sys_role_menu` VALUES (2, 1004);
-INSERT INTO `sys_role_menu` VALUES (2, 1005);
-INSERT INTO `sys_role_menu` VALUES (2, 1006);
-INSERT INTO `sys_role_menu` VALUES (2, 1007);
-INSERT INTO `sys_role_menu` VALUES (2, 1008);
-INSERT INTO `sys_role_menu` VALUES (2, 1009);
-INSERT INTO `sys_role_menu` VALUES (2, 1010);
-INSERT INTO `sys_role_menu` VALUES (2, 1011);
-INSERT INTO `sys_role_menu` VALUES (2, 1012);
-INSERT INTO `sys_role_menu` VALUES (2, 1013);
-INSERT INTO `sys_role_menu` VALUES (2, 1014);
-INSERT INTO `sys_role_menu` VALUES (2, 1015);
-INSERT INTO `sys_role_menu` VALUES (2, 1016);
-INSERT INTO `sys_role_menu` VALUES (2, 1017);
-INSERT INTO `sys_role_menu` VALUES (2, 1018);
-INSERT INTO `sys_role_menu` VALUES (2, 1019);
-INSERT INTO `sys_role_menu` VALUES (2, 1020);
-INSERT INTO `sys_role_menu` VALUES (2, 1021);
-INSERT INTO `sys_role_menu` VALUES (2, 1022);
-INSERT INTO `sys_role_menu` VALUES (2, 1023);
-INSERT INTO `sys_role_menu` VALUES (2, 1024);
-INSERT INTO `sys_role_menu` VALUES (2, 1025);
-INSERT INTO `sys_role_menu` VALUES (2, 1026);
-INSERT INTO `sys_role_menu` VALUES (2, 1027);
-INSERT INTO `sys_role_menu` VALUES (2, 1028);
-INSERT INTO `sys_role_menu` VALUES (2, 1029);
-INSERT INTO `sys_role_menu` VALUES (2, 1030);
-INSERT INTO `sys_role_menu` VALUES (2, 1031);
-INSERT INTO `sys_role_menu` VALUES (2, 1032);
-INSERT INTO `sys_role_menu` VALUES (2, 1033);
-INSERT INTO `sys_role_menu` VALUES (2, 1034);
-INSERT INTO `sys_role_menu` VALUES (2, 1035);
-INSERT INTO `sys_role_menu` VALUES (2, 1036);
-INSERT INTO `sys_role_menu` VALUES (2, 1037);
-INSERT INTO `sys_role_menu` VALUES (2, 1038);
-INSERT INTO `sys_role_menu` VALUES (2, 1039);
-INSERT INTO `sys_role_menu` VALUES (2, 1040);
-INSERT INTO `sys_role_menu` VALUES (2, 1041);
-INSERT INTO `sys_role_menu` VALUES (2, 1042);
-INSERT INTO `sys_role_menu` VALUES (2, 1043);
-INSERT INTO `sys_role_menu` VALUES (2, 1044);
-INSERT INTO `sys_role_menu` VALUES (2, 1045);
-INSERT INTO `sys_role_menu` VALUES (2, 1046);
-INSERT INTO `sys_role_menu` VALUES (2, 1047);
-INSERT INTO `sys_role_menu` VALUES (2, 1048);
-INSERT INTO `sys_role_menu` VALUES (2, 1049);
-INSERT INTO `sys_role_menu` VALUES (2, 1050);
-INSERT INTO `sys_role_menu` VALUES (2, 1051);
-INSERT INTO `sys_role_menu` VALUES (2, 1052);
-INSERT INTO `sys_role_menu` VALUES (2, 1053);
-INSERT INTO `sys_role_menu` VALUES (2, 1054);
-INSERT INTO `sys_role_menu` VALUES (2, 1055);
-INSERT INTO `sys_role_menu` VALUES (2, 1056);
-INSERT INTO `sys_role_menu` VALUES (2, 1057);
-INSERT INTO `sys_role_menu` VALUES (2, 1058);
-INSERT INTO `sys_role_menu` VALUES (2, 1059);
-INSERT INTO `sys_role_menu` VALUES (2, 1060);
+INSERT INTO `sys_role_menu` VALUES (2, 2000);
+INSERT INTO `sys_role_menu` VALUES (2, 2001);
+INSERT INTO `sys_role_menu` VALUES (2, 2002);
+INSERT INTO `sys_role_menu` VALUES (2, 2003);
+INSERT INTO `sys_role_menu` VALUES (2, 2004);
+INSERT INTO `sys_role_menu` VALUES (2, 2005);
+INSERT INTO `sys_role_menu` VALUES (2, 2007);
+INSERT INTO `sys_role_menu` VALUES (2, 2008);
+INSERT INTO `sys_role_menu` VALUES (2, 2017);
+INSERT INTO `sys_role_menu` VALUES (2, 2018);
+INSERT INTO `sys_role_menu` VALUES (2, 2024);
+INSERT INTO `sys_role_menu` VALUES (2, 2025);
+INSERT INTO `sys_role_menu` VALUES (2, 2026);
+INSERT INTO `sys_role_menu` VALUES (2, 2030);
+INSERT INTO `sys_role_menu` VALUES (2, 2031);
+INSERT INTO `sys_role_menu` VALUES (2, 2032);
+INSERT INTO `sys_role_menu` VALUES (2, 2038);
+INSERT INTO `sys_role_menu` VALUES (2, 2039);
+INSERT INTO `sys_role_menu` VALUES (2, 2040);
+INSERT INTO `sys_role_menu` VALUES (2, 2046);
+INSERT INTO `sys_role_menu` VALUES (2, 2047);
+INSERT INTO `sys_role_menu` VALUES (2, 2048);
+INSERT INTO `sys_role_menu` VALUES (2, 2049);
+INSERT INTO `sys_role_menu` VALUES (2, 2050);
+INSERT INTO `sys_role_menu` VALUES (2, 2051);
+INSERT INTO `sys_role_menu` VALUES (2, 2052);
+INSERT INTO `sys_role_menu` VALUES (2, 2053);
+INSERT INTO `sys_role_menu` VALUES (2, 2054);
+INSERT INTO `sys_role_menu` VALUES (2, 2059);
+INSERT INTO `sys_role_menu` VALUES (2, 2060);
+INSERT INTO `sys_role_menu` VALUES (2, 2061);
+INSERT INTO `sys_role_menu` VALUES (2, 2062);
+INSERT INTO `sys_role_menu` VALUES (2, 2063);
+INSERT INTO `sys_role_menu` VALUES (2, 2064);
+INSERT INTO `sys_role_menu` VALUES (2, 2065);
+INSERT INTO `sys_role_menu` VALUES (2, 2066);
+INSERT INTO `sys_role_menu` VALUES (100, 2000);
+INSERT INTO `sys_role_menu` VALUES (100, 2008);
+INSERT INTO `sys_role_menu` VALUES (100, 2064);
+INSERT INTO `sys_role_menu` VALUES (100, 2065);
+INSERT INTO `sys_role_menu` VALUES (100, 2066);
+INSERT INTO `sys_role_menu` VALUES (100, 2100);
 
 -- ----------------------------
 -- Table structure for sys_user
@@ -1293,14 +1404,16 @@ CREATE TABLE `sys_user`  (
   `update_time` datetime NULL DEFAULT NULL COMMENT '更新时间',
   `remark` varchar(500) CHARACTER SET utf8mb3 COLLATE utf8mb3_general_ci NULL DEFAULT NULL COMMENT '备注',
   PRIMARY KEY (`user_id`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 101 CHARACTER SET = utf8mb3 COLLATE = utf8mb3_general_ci COMMENT = '用户信息表' ROW_FORMAT = Dynamic;
+) ENGINE = InnoDB AUTO_INCREMENT = 105 CHARACTER SET = utf8mb3 COLLATE = utf8mb3_general_ci COMMENT = '用户信息表' ROW_FORMAT = Dynamic;
 
 -- ----------------------------
 -- Records of sys_user
 -- ----------------------------
-INSERT INTO `sys_user` VALUES (1, 103, 'admin', '若依', '00', 'ry@163.com', '15888888888', '1', '', '$2a$10$7JB720yubVSZvUI0rEqK/.VqGOZTH.ulu33dHOiBE8ByOhJIrdAu2', '0', '0', '192.168.1.9', '2026-07-09 14:53:18', '2026-06-11 21:52:01', 'admin', '2026-06-11 21:52:01', '', NULL, '管理员');
-INSERT INTO `sys_user` VALUES (2, 105, 'ry', '小若依', '00', 'ry@qq.com', '15666666666', '1', '', '$2a$10$7JB720yubVSZvUI0rEqK/.VqGOZTH.ulu33dHOiBE8ByOhJIrdAu2', '0', '0', '127.0.0.1', '2026-06-11 21:52:01', '2026-06-11 21:52:01', 'admin', '2026-06-11 21:52:01', '', NULL, '测试员');
-INSERT INTO `sys_user` VALUES (100, 1111, 'rege', 'agrre', '00', '', '', '0', '', '$2a$10$ak1rBEtWpcmOc22xTtrfMe9C8brbxu9yoUNNYPgWPjO5B5bFdf4lC', '0', '0', '', NULL, NULL, 'admin', '2026-06-20 15:27:34', '', NULL, NULL);
+INSERT INTO `sys_user` VALUES (1, 103, 'admin', '若依', '00', 'ry@163.com', '15888888888', '1', '', '$2a$10$7JB720yubVSZvUI0rEqK/.VqGOZTH.ulu33dHOiBE8ByOhJIrdAu2', '0', '0', '127.0.0.1', '2026-07-14 19:22:26', '2026-06-11 21:52:01', 'admin', '2026-06-11 21:52:01', '', NULL, '管理员');
+INSERT INTO `sys_user` VALUES (2, 105, 'dyx', '邓永鑫', '00', 'dyx@qq.com', '15666666666', '0', '/profile/avatar/2026/07/14/67e9019f87a742fd978ea1f8b79b942c.jpg', '$2a$10$7JB720yubVSZvUI0rEqK/.VqGOZTH.ulu33dHOiBE8ByOhJIrdAu2', '0', '0', '192.168.0.100', '2026-07-14 19:23:03', '2026-06-11 21:52:01', 'admin', '2026-06-11 21:52:01', '', '2026-07-14 00:28:11', '测试员');
+INSERT INTO `sys_user` VALUES (102, 202, 'niuma', '牛马', '00', '', '', '0', '', '$2a$10$YxXvW89cdxvL9SlNAi2inOAAn0q4uSIaWq.IVgouk29K3pPpj02gK', '0', '0', '192.168.0.100', '2026-07-14 20:08:06', '2026-07-14 17:22:07', 'admin', '2026-07-14 17:17:22', 'admin', '2026-07-14 20:21:12', '董事长秘书');
+INSERT INTO `sys_user` VALUES (103, 200, 'jiedi', '维修杰师傅', '00', '', '', '0', '/profile/avatar/2026/07/14/ec61a7e3ff574beb96d60bfe66e1eb83.jpg', '$2a$10$nmfZpdacbskOXClWE1ag4uJuOgPr2KhBUL0ssO5UBe9hZb/HNJTuu', '0', '0', '192.168.0.100', '2026-07-14 19:57:05', '2026-07-14 19:57:20', 'admin', '2026-07-14 19:56:17', 'admin', '2026-07-14 20:18:54', NULL);
+INSERT INTO `sys_user` VALUES (104, 203, 'xiaodijie', '小弟杰', '00', '', '', '0', '', '$2a$10$s1d7PF8lEVqKZh1ZY27Zb.HaYhj8pwpvOteCZ3cyVG5/BEs4uP72.', '0', '2', '', NULL, NULL, 'admin', '2026-07-14 20:20:37', '', NULL, NULL);
 
 -- ----------------------------
 -- Table structure for sys_user_post
@@ -1317,6 +1430,8 @@ CREATE TABLE `sys_user_post`  (
 -- ----------------------------
 INSERT INTO `sys_user_post` VALUES (1, 1);
 INSERT INTO `sys_user_post` VALUES (2, 2);
+INSERT INTO `sys_user_post` VALUES (102, 3);
+INSERT INTO `sys_user_post` VALUES (103, 2);
 
 -- ----------------------------
 -- Table structure for sys_user_role
@@ -1333,5 +1448,7 @@ CREATE TABLE `sys_user_role`  (
 -- ----------------------------
 INSERT INTO `sys_user_role` VALUES (1, 1);
 INSERT INTO `sys_user_role` VALUES (2, 2);
+INSERT INTO `sys_user_role` VALUES (102, 2);
+INSERT INTO `sys_user_role` VALUES (103, 100);
 
 SET FOREIGN_KEY_CHECKS = 1;
