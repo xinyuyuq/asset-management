@@ -48,6 +48,7 @@
           {{ (queryParams.pageNum - 1) * queryParams.pageSize + scope.$index + 1 }}
         </template>
       </el-table-column>
+      <el-table-column label="资产ID" align="center" prop="detailId" width="100" />
       <el-table-column label="资产名称" align="center" prop="assetName" />
       <el-table-column label="采购价" align="center" prop="purchasePrice" />
       <el-table-column label="计量单位" align="center" prop="measureUnitName" width="100" />
@@ -92,7 +93,7 @@
             size="mini"
             type="text"
             style="color: #409EFF;"
-            :disabled="scope.row.outStatus != '0'"
+            :disabled="scope.row.outStatus != '0' || scope.row.assetStatus != '0'"
             @click="handleOut(scope.row)"
             v-hasPermi="['asset:detail:out']"
           >出库</el-button>
@@ -215,7 +216,7 @@ export default {
       this.handleQuery()
     },
     handleSelectable(row, index) {
-      return row.outStatus === '0'
+      return row.outStatus === '0' && row.assetStatus === '0'
     },
     handleSelectionChange(selection) {
       this.ids = selection.map(item => item.detailId)

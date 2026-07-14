@@ -5,11 +5,13 @@ import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.conditions.update.LambdaUpdateWrapper;
 import com.github.pagehelper.Page;
 import com.github.pagehelper.PageHelper;
+import com.ruoyi.asset.domain.entity.AssetDetail;
 import com.ruoyi.asset.domain.entity.AssetRepair;
 import com.ruoyi.asset.domain.param.AssetRepairParam.AssetRepairQueryParam;
 import com.ruoyi.asset.domain.vo.AssetRepairDetailVo;
 import com.ruoyi.asset.domain.vo.AssetRepairQueryVo;
 import com.ruoyi.asset.mapper.AssetRepairMapper;
+import com.ruoyi.asset.service.IAssetDetailService;
 import com.ruoyi.asset.service.IAssetRepairService;
 import com.ruoyi.common.annotation.Log;
 import com.ruoyi.common.core.controller.BaseController;
@@ -35,6 +37,9 @@ public class AssetRepairController extends BaseController {
 
     @Autowired
     private IAssetRepairService service;
+
+    @Autowired
+    private IAssetDetailService detailService;
 
     @Autowired
     private AssetRepairMapper mapper;
@@ -97,6 +102,22 @@ public class AssetRepairController extends BaseController {
         uw.eq(AssetRepair::getRepairId, repairId);
         uw.set(AssetRepair::getRepairStatus, repairStatus);
         boolean update = service.update(uw);
+        if (update) {
+            AssetRepair repair = service.getById(repairId);
+            if (repair != null && repair.getDetailId() != null) {
+                if ("1".equals(repairStatus)) {
+                    LambdaUpdateWrapper<AssetDetail> duw = new LambdaUpdateWrapper<>();
+                    duw.eq(AssetDetail::getDetailId, repair.getDetailId());
+                    duw.set(AssetDetail::getAssetStatus, "0");
+                    detailService.update(duw);
+                } else if ("2".equals(repairStatus)) {
+                    LambdaUpdateWrapper<AssetDetail> duw = new LambdaUpdateWrapper<>();
+                    duw.eq(AssetDetail::getDetailId, repair.getDetailId());
+                    duw.set(AssetDetail::getAssetStatus, "2");
+                    detailService.update(duw);
+                }
+            }
+        }
         return R.to(update, "修改维修状态");
     }
 }

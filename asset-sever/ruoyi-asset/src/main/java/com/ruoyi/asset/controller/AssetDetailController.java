@@ -75,6 +75,16 @@ public class AssetDetailController {
     @PreAuthorize("@ss.hasPermi('asset:detail:out')")
     @PostMapping("/out")
     public R<?> out(@RequestBody OutBatchParam param){
+        LambdaQueryWrapper<AssetDetail> qw = new LambdaQueryWrapper<>();
+        qw.in(AssetDetail::getDetailId, param.getDetailIds());
+        qw.eq(AssetDetail::getDelFlag, "0");
+        qw.eq(AssetDetail::getOutStatus, "0");
+        List<AssetDetail> list = service.list(qw);
+        for (AssetDetail detail : list) {
+            if (!"0".equals(detail.getAssetStatus())) {
+                return R.fail("资产ID【" + detail.getDetailId() + "】状态为" + ("1".equals(detail.getAssetStatus()) ? "报修" : "报废") + "，无法出库");
+            }
+        }
         LambdaUpdateWrapper<AssetDetail> uw = new LambdaUpdateWrapper<>();
         uw.in(AssetDetail::getDetailId, param.getDetailIds());
         uw.eq(AssetDetail::getDelFlag,"0");

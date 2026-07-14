@@ -91,8 +91,8 @@
       </el-table-column>
       <el-table-column label="入库状态" align="center" prop="inStatus">
         <template slot-scope="scope">
-          <el-tag :type="(scope.row.canInNum <= 0 || scope.row.inStatus === '1') ? 'success' : 'info'">
-            {{ (scope.row.canInNum <= 0 || scope.row.inStatus === '1') ? '已入库' : '未入库' }}
+          <el-tag :type="(scope.row.canInNum <= 0 || scope.row.inStatus === '1') ? 'success' : 'warning'">
+            {{ (scope.row.canInNum <= 0 || scope.row.inStatus === '1') ? '已入库' : '可入库' }}
           </el-tag>
         </template>
       </el-table-column>
