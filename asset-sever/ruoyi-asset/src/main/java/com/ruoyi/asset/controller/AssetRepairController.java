@@ -54,7 +54,7 @@ public class AssetRepairController extends BaseController {
         if (assetRepairQueryParam.getAssetName() != null) {
             qw.like("t1.asset_name", assetRepairQueryParam.getAssetName());
         }
-        if (!SecurityUtils.isAdmin()) {
+        if (!SecurityUtils.isAdmin() && !SecurityUtils.hasPermi("asset:repair:edit")) {
             qw.eq("t1.repair_user_id", SecurityUtils.getUserId());
         }
 
@@ -82,7 +82,7 @@ public class AssetRepairController extends BaseController {
     public void export(HttpServletResponse response) {
         QueryWrapper<AssetRepair> qw = new QueryWrapper<>();
         qw.eq("del_flag", "0");
-        if (!SecurityUtils.isAdmin()) {
+        if (!SecurityUtils.isAdmin() && !SecurityUtils.hasPermi("asset:repair:edit")) {
             qw.eq("repair_user_id", SecurityUtils.getUserId());
         }
         List<AssetRepair> list = service.list(qw);

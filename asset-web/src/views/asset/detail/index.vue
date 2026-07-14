@@ -93,7 +93,7 @@
             size="mini"
             type="text"
             style="color: #409EFF;"
-            :disabled="scope.row.outStatus != '0' || scope.row.assetStatus != '0'"
+            :disabled="scope.row.outStatus != '0'"
             @click="handleOut(scope.row)"
             v-hasPermi="['asset:detail:out']"
           >出库</el-button>
@@ -223,6 +223,14 @@ export default {
       this.multiple = !selection.length
     },
     handleOut(row) {
+      if (row.assetStatus === '1') {
+        this.$modal.msgWarning("该资产当前为报修状态，请先维修好后再出库")
+        return
+      }
+      if (row.assetStatus === '2') {
+        this.$modal.msgWarning("该资产已报废，无法出库")
+        return
+      }
       this.outType = 'single'
       this.currentDetailId = row.detailId
       this.outForm.receiveUserId = this.isAdmin ? undefined : this.$store.getters.id
